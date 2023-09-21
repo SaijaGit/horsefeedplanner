@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body {
+    background-color: #f0f0f0; 
+    font-family: Arial, sans-serif;
+}
+h1, h2, h3 {
+    text-align: center;
+    color: #556b2f;
+}
+
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+</style>
+</head>
+<body>
+
+
+{% if session.user_id %}
+
+<h1>Horse Feed planner!</h1>
+<p>You are logged in as {{ session.username }}</p>
+<a href="/logout">Log out</a>
+{% else %}
+
+<h1>Welcome to Horse Feed planner!</h1>
+<p>
+
+<h2>
+<a href="{{ url_for('login') }}">Log in</a>
+</h2>
+
+<h3>or</h3>
+
+<h2><a href="{{ url_for('register') }}">Create a new user account</a></h2>
+{% endif %}
+
+</body>
+</html>
