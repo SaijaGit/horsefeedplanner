@@ -6,10 +6,14 @@ import users
 def add(horse_name, birth_year, weight_class, exercise_level):
     user_id= users.user_id()
     sql = text("INSERT INTO horses (horse_name, birth_year, weight_class, exercise_level, owner_id) VALUES (:horse_name, :birth_year, :weight_class, :exercise_level,:owner_id)")
+    print("horses add: sql =", sql, {"horse_name":horse_name, "birth_year":birth_year, "weight_class":weight_class, "exercise_level":exercise_level, "owner_id":user_id } ) 
     try:
         db.session.execute(sql, {"horse_name":horse_name, "birth_year":birth_year, "weight_class":weight_class, "exercise_level":exercise_level, "owner_id":user_id })
+        db.session.commit()
     except:
+        print("horses add: except") 
         return False
+    print("horses add: OK") 
     return True
     
 def get_info(horse_id):

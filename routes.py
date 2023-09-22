@@ -62,5 +62,16 @@ def newhorse():
         birth_year = request.form["birth_year"]
         weight_class = request.form["weight_class"]
         exercise_level = request.form["exercise_level"]
-        horses.add(horse_name, birth_year, weight_class, exercise_level)
-        render_template("index.html")
+        print("routes newhorse: horse info =", horse_name, birth_year, weight_class, exercise_level ) 
+
+        if not horse_name or not birth_year or not weight_class or not exercise_level:
+            flash("Please fill in all the required fields!", "error")
+            return render_template("newhorse.html")
+
+        added = horses.add(horse_name, birth_year, weight_class, exercise_level)
+        if not added:
+            flash("Failed to add the horse :(", "error")
+            return render_template("newhorse.html")
+        
+        horse_names = horses.get_all_names()
+        return render_template("index.html", horse_names=horse_names)
