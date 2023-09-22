@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body {
+    background-color: #f0f0f0; 
+    font-family: Arial, sans-serif;
+}
+h1, h2, h3 {
+    text-align: center;
+    color: #556b2f;
+}
+
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+</style>
+</head>
+<body>
+
+    <h1>Horse Feed Planner</h1>
+
+    <h3>Fill in the information about your horse!</h3>
+    <br>
+
+<form action="/newhorse" method="POST">
+    <p>Horse's name: 
+    <input type="text" name="horse_name">
+    <p>Year of birth
+    <input type="text" name="birth_year">
+
+
+    <p>
+    Weight class:
+    <p>
+    <input type="radio" name="weight_class" value="450"> 450 kg
+    <input type="radio" name="weight_class" value="550"> 550 kg
+    <input type="radio" name="weight_class" value="600"> 600 kg
+
+
+    <p>
+    Level of excercise:
+    <p>
+    <input type="radio" name="exercise_level" value="0"> Rest
+    <input type="radio" name="exercise_level" value="1"> Light work
+    <input type="radio" name="exercise_level" value="2"> Moderate work
+    <input type="radio" name="exercise_level" value="3"> Heavy work       
+    <p>
+
+        <input type="submit" value="Save">
+</form>
+
+
+<p>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</p>
+
+</body>
+</html>

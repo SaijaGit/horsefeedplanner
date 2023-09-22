@@ -30,6 +30,24 @@ a:hover {
 
 <h1>Horse Feed planner!</h1>
 <p>You are logged in as {{ session.username }}</p>
+
+<h3>My Horses</h3>
+
+{% if horse_names is none %}
+<p>You don't have any horses yet</p>
+
+{% else %}
+<ul>
+{% for horse_name in horse_names %}
+<li>{{ horse_name }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<p>
+    <a href="{{ url_for('newhorse') }}">Add a new horse!</a>
+</p>
+
 <a href="/logout">Log out</a>
 {% else %}
 

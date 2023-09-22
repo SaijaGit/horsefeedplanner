@@ -1,10 +1,19 @@
 from app import app
 from flask import render_template, request, session, redirect, flash
-import users
+import users, horses
 
 @app.route("/")
+
 def index():
-    return render_template("index.html")
+    user_id = users.user_id()
+    print("routes index: user_id=", user_id ) 
+    if user_id:
+        horse_names = horses.get_all_names()
+        return render_template("index.html", horse_names=horse_names)
+    
+    else:
+        return render_template("index.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -42,3 +51,16 @@ def register():
         else:
             flash("Account creation failed:(", "error")
             return render_template("register.html")
+        
+@app.route("/newhorse", methods=["GET", "POST"])
+def newhorse():
+    if request.method == "GET":
+        return render_template("newhorse.html")
+    
+    if request.method == "POST":
+        horse_name = request.form["horse_name"]
+        birth_year = request.form["birth_year"]
+        weight_class = request.form["weight_class"]
+        exercise_level = request.form["exercise_level"]
+        horses.add(horse_name, birth_year, weight_class, exercise_level)
+        render_template("index.html")
