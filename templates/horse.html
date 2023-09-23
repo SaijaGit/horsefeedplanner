@@ -36,45 +36,25 @@ a:hover {
 </head>
 <body>
 
-
-{% if session.user_id %}
-
 <h1>Horse Feed planner!</h1>
 <p>You are logged in as {{ session.username }}</p>
 
-<h3>My Horses</h3>
+<h2>{{ horse_info[1] }}</h2>
 
-{% if horse_list is none %}
-<p>You don't have any horses yet</p>
+<h3>Horse information</h3>
+<p>Horse's id in the Feed Planner: {{ horse_info[0] }}</p>
+<p>Name: {{ horse_info[1] }}</p>
+<p>Year of birth: {{ horse_info[2] }}</p>
+<p>Weight class: {{ horse_info[3] }} kg</p>
+<p>Excercise level: {{ horse_info[6] }}</p>
 
-{% else %}
-<ul>
-{% for h in horse_list %}
-<li>
-    <a href="{{ url_for('horse', horse_id=h[0]) }}">{{ h[0] }}: {{ h[1] }}</a>
-</li>
-{% endfor %}
-</ul>
-{% endif %}
 
 <p>
-    <a href="{{ url_for('newhorse') }}">Add a new horse!</a>
+    <a href="{{ url_for('index') }}">Back to Home</a>
 </p>
 
 <a href="/logout">Log out</a>
-{% else %}
 
-<h1>Welcome to Horse Feed planner!</h1>
-<p>
-
-<h2>
-<a href="{{ url_for('login') }}">Log in</a>
-</h2>
-
-<h2>or</h2>
-
-<h2><a href="{{ url_for('register') }}">Create a new user account</a></h2>
-{% endif %}
 
 </body>
 </html>

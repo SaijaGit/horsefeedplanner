@@ -22,7 +22,21 @@ def get_info(horse_id):
     horse = result.fetchone()
     if not horse:
         return None
-    return horse
+    exercise_levels = ["Rest", "Light work", "Moderate work", "Heavy work"]
+    horse_info = list(horse)
+    horse_info.append(exercise_levels[horse[4]])
+    return horse_info
+
+def get_ids_and_names():
+    user_id = users.user_id()
+    sql = text("SELECT id, horse_name FROM horses WHERE owner_id=:owner_id")
+    result = db.session.execute(sql, {"owner_id": user_id})
+    rows = result.fetchall()
+    if not rows:
+        return None
+    else:
+        return [(row[0], row[1]) for row in rows]
+
     
 def get_all_ids():
     user_id= users.user_id()
@@ -43,3 +57,4 @@ def get_all_names():
         return None
     else:
         return horse_names
+    

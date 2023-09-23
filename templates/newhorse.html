@@ -7,15 +7,26 @@ body {
     background-color: #f0f0f0; 
     font-family: Arial, sans-serif;
 }
-h1, h2, h3 {
+h1{
     text-align: center;
     color: #556b2f;
 }
 
+h2{
+    text-align: center;
+    color: #807156;
+}
+
+
+h3 {
+    text-align: left;
+    color: #556b2f;
+}
 
 a {
     color: #333;
     text-decoration: none;
+    font-weight: bold;
 }
 a:hover {
     text-decoration: underline;
@@ -27,8 +38,11 @@ a:hover {
 
     <h1>Horse Feed Planner</h1>
 
-    <h3>Fill in the information about your horse!</h3>
-    <br>
+    <h2>Add a new horse!</h2>
+
+    <p><br></p>
+
+    <h3>Fill in the information about your horse</h3>
 
 <form action="/newhorse" method="POST">
     <p>Horse's name: 

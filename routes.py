@@ -8,8 +8,9 @@ def index():
     user_id = users.user_id()
     print("routes index: user_id=", user_id ) 
     if user_id:
-        horse_names = horses.get_all_names()
-        return render_template("index.html", horse_names=horse_names)
+        horse_list = horses.get_ids_and_names()
+        print("routes index: horse_info=", horse_list )
+        return render_template("index.html", horse_list=horse_list)
     
     else:
         return render_template("index.html")
@@ -75,3 +76,17 @@ def newhorse():
         
         horse_names = horses.get_all_names()
         return render_template("index.html", horse_names=horse_names)
+    
+@app.route("/horse/<horse_id>")
+def horse(horse_id):
+    user_id = users.user_id()
+    horse_info = horses.get_info(horse_id)
+    print("routes horse: horse info =", horse_info ) 
+    if horse_info == None:
+        return render_template("index.html")
+    
+    else:
+        if user_id and horse_info[5]:
+            return render_template("horse.html", horse_info=horse_info)
+        else:
+            return render_template("index.html")
