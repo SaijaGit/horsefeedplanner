@@ -86,7 +86,9 @@ def horse(horse_id):
         return render_template("index.html")
     
     else:
-        if user_id and horse_info[5]:
+        print("routes horse: user_id =", user_id, " vs. owner_id =", horse_info[5]) 
+        if user_id == horse_info[5]:
             return render_template("horse.html", horse_info=horse_info)
         else:
-            return render_template("index.html")
+            print("routes horse: not the owner")
+            return redirect("/")
