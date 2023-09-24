@@ -95,16 +95,73 @@ def horse(horse_id):
 
 @app.route("/feed/<feed_id>")
 def feed(feed_id):
-    user_id = feeds.user_id()
-    feed_info = feeds.get_info(feed_id)
-    print("routes feed: feed info =", feed_info ) 
-    if feed_info == None:
+    user_id = users.user_id()
+    feed_name_owner = feeds.get_name_and_owner(feed_id)
+    print("routes feed: feed feed_name_owner =", feed_name_owner ) 
+
+    if feed_name_owner == None:
         return render_template("index.html")
+
+    print("routes feed: user_id =", user_id, " vs. owner_id =", feed_name_owner[1])
     
+    if user_id != feed_name_owner[1] and feed_name_owner[1]!= 0:
+        print("routes feed: not your feed")
+        return redirect("/")
+    
+    nutrition_info = feeds.get_nutriton_info(feed_id)
+
+    if nutrition_info:
+        return render_template("feed.html", feed_name=feed_name_owner[0], nutrition_info = nutrition_info)
     else:
-        print("routes feed: user_id =", user_id, " vs. owner_id =", feed_info[2]) 
-        if user_id == feed_info[2]:
-            return render_template("feed.html", feed_info=feed_info)
-        else:
-            print("routes feed: not your feed")
-            return redirect("/")
+        return redirect("/")
+
+@app.route("/newfeed", methods=["GET", "POST"])
+def newfeed():
+    if request.method == "GET":
+        return render_template("newfeed.html")
+    
+    if request.method == "POST":
+        name = request.form["name"]
+        moisture = request.form["moisture"]
+        energy = request.form["energy"]
+        protein = request.form["protein"]
+        fat = request.form["fat"]
+        fiber = request.form["fiber"]
+        starch = request.form["starch"]
+        sugar = request.form["sugar"]
+        calcium = request.form["calcium"]
+        phosphorus = request.form["phosphorus"]
+        magnesium = request.form["magnesium"]
+        sodium = request.form["sodium"]
+        iron = request.form["iron"]
+        copper = request.form["copper"]
+        manganese = request.form["manganese"]
+        zinc = request.form["zinc"]
+        iodine = request.form["iodine"]
+        selenium = request.form["selenium"]
+        cobalt = request.form["cobalt"]
+        vitamin_a = request.form["vitamin_a"]
+        vitamin_d3 = request.form["vitamin_d3"]
+        vitamin_e = request.form["vitamin_e"]
+        vitamin_b1 = request.form["vitamin_b1"]
+        vitamin_b2 = request.form["vitamin_b2"]
+        vitamin_b6 = request.form["vitamin_b6"]
+        vitamin_b12 = request.form["vitamin_b12"]
+        biotin = request.form["biotin"]
+        niacin = request.form["niacin"]
+
+        print("routes newfeed: feed info =", name, moisture, energy, protein ) 
+
+        if not name:
+            flash("Please enter the name of the feed!", "error")
+            return render_template("newfeed.html")
+
+        added = feeds.add(name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus,
+                            magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt,
+                            vitamin_a, vitamin_d3, vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6,
+                            vitamin_b12, biotin, niacin)
+        if not added:
+            flash("Failed to add the feed :(", "error")
+            return render_template("newfeed.html")
+
+        return redirect("/")

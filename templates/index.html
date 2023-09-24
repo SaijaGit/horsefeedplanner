@@ -62,7 +62,9 @@ a:hover {
 </p>
 
 
-<h3>My Feeds</h3>
+<h3>All the Feeds</h3>
+<p>In this version of the app the feeds from all the users are listed here, but you can only see the info of your own ones. 
+    This will be changed.</p>
 
 {% if feed_list is none %}
 <p>You havent save any own feeds yet, but you can check the default feeds!</p>
@@ -78,7 +80,7 @@ a:hover {
 {% endif %}
 
 <p>
-    <a href="{{ url_for('newhorse') }}">Add a new horse!</a>
+    <a href="{{ url_for('newfeed') }}">Add a new feed!</a>
 </p>
 
 

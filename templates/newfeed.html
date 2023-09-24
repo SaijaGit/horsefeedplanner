@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+
+body {
+    background-color: #f0f0f0; 
+    font-family: Arial, sans-serif;
+}
+h1{
+    text-align: center;
+    color: #556b2f;
+}
+
+h2{
+    text-align: center;
+    color: #807156;
+}
+
+
+h3 {
+    text-align: left;
+    color: #556b2f;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+</style>
+</head>
+<body>
+
+    <h1>Horse Feed Planner</h1>
+
+    <h2>Add a new feed!</h2>
+
+    <p><br></p>
+
+    <h3>Fill in the information, put 0 into fields you dont know the value of!!!!!</h3>
+
+<form action="/newfeed" method="POST">
+    <p>Feed's name: 
+    <input type="text" name="name">
+
+    <p>Moisture
+    <input type="text" name="moisture"> %
+    
+    <p>Metabolizable energy
+    <input type="text" name="energy"> MJ/kg DM
+
+    <p>Protein
+    <input type="text" name="protein"> %
+    
+    <p>Fat
+    <input type="text" name="fat"> %
+    
+    <p>Fiber
+    <input type="text" name="fiber"> %
+    
+    <p>Starch
+    <input type="text" name="starch"> %
+    
+    <p>Sugar
+    <input type="text" name="sugar"> %
+    
+    <p>Calcium
+    <input type="text" name="calcium"> g/kg
+    
+    <p>Phosphorus
+    <input type="text" name="phosphorus"> g/kg
+    
+    <p>Magnesium
+    <input type="text" name="magnesium"> g/kg
+    
+    <p>Sodium
+    <input type="text" name="sodium"> g/kg
+    
+    <p>Iron
+    <input type="text" name="iron"> mg/kg
+    
+    <p>Copper
+    <input type="text" name="copper"> mg/kg
+    
+    <p>Manganese
+    <input type="text" name="manganese"> mg/kg
+    
+    <p>Zinc
+    <input type="text" name="zinc"> mg/kg
+    
+    <p>Iodine
+    <input type="text" name="iodine"> mg/kg
+    
+    <p>Selenium
+    <input type="text" name="selenium"> mg/kg
+    
+    <p>Cobalt
+    <input type="text" name="cobalt"> mg/kg
+    
+    <p>Vitamin A
+    <input type="text" name="vitamin_a"> IU/kg
+    
+    <p>Vitamin D3
+    <input type="text" name="vitamin_d3"> IU/kg
+    
+    <p>Vitamin E
+    <input type="text" name="vitamin_e"> mg/kg
+    
+    <p>Vitamin B1
+    <input type="text" name="vitamin_b1"> mg/kg
+    
+    <p>Vitamin B2
+    <input type="text" name="vitamin_b2"> mg/kg
+    
+    <p>Vitamin B6
+    <input type="text" name="vitamin_b6"> mg/kg
+    
+    <p>Vitamin B12
+    <input type="text" name="vitamin_b12"> mg/kg
+    
+    <p>Biotin
+    <input type="text" name="biotin"> mg/kg
+    
+    <p>Niacin
+    <input type="text" name="niacin"> mg/kg
+
+    <input type="submit" value="Save">
+</form>
+
+{% with messages = get_flashed_messages() %}
+ {% if messages %}
+  <ul>
+  {% for message in messages %}
+    <li>{{ message }}</li>
+  {% endfor %}
+  </ul>
+ {% endif %}
+{% endwith %}
+
+<p>
+    <a href="{{ url_for('index') }}">Back to Home</a>
+</p>
+
+</body>
+</html>

@@ -38,14 +38,22 @@ CREATE TABLE feeds (
     vitamin_a FLOAT, 
     vitamin_d3 FLOAT, 
     vitamin_e FLOAT, 
-    vitamin_k FLOAT, 
     vitamin_b1 FLOAT, 
     vitamin_b2 FLOAT, 
     vitamin_b6 FLOAT, 
     vitamin_b12 FLOAT, 
     biotin FLOAT, 
-    niacin FLOAT, 
-    pantothenic_acid FLOAT, 
-    folic_acid FLOAT
+    niacin FLOAT
 );
+
+CREATE TABLE nutritions (
+    id SERIAL PRIMARY KEY,
+    reference TEXT,
+    name TEXT,
+    symbol TEXT,
+    unit TEXT,
+    description TEXT
+);
+
+
 
