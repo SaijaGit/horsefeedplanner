@@ -80,3 +80,48 @@ Administrators can remove user accounts and modify default feed information and 
 - List of all the users and buttons to remove their accouts
 - List of default feeds and forms to modify their contents
 - Form to modify the feeding recommendations
+
+## Status at 24.9.2023
+### Already implemented:
+- Regular users
+- Account creation, login, logout
+- Wiewing basic information on user's own horses
+- Wiewing information on user's own and default feeds
+- Possibility to add own horses into database
+- Possibiity to add own feeds into database
+
+### Remarks:
+- The presentation and processing of feed information is still at an early stage. Entering feed information is difficult,
+  as the program requires you to fill in all fields at this stage. The control of who has access to which feed's information is also incomplete.
+- Adding the starting content of the database tables will be changed to be handled somehow other than copy-pasting.
+- The code is very much a work in progress. The Pylint tool has not been used yet and there are no comments.
+- The graphic design of the application is not final. The pages just have a touch of css to make them a little more pleasing to the eye.
+
+## How to use the app
+
+1. Go to the application directory
+
+1. Start venv:
+source venv/bin/activate
+
+1. Install dependencies:
+pip install -r requirements.txt
+
+1. Create database tables:
+psql < schema.sql
+
+1. Start psql
+Give command \dt. The database should contain tables feeds, horses, nutritions and users.
+
+1. Copy-paste the contents of the file starter_content_for_the_database.txt into psql and press enter.
+
+1. If you give commands
+  - SELECT * FROM nutrients;
+  - SELECT name FROM feeds;
+you should see data in these tables.
+
+1. Start the application with the command:
+flask run
+
+1. Start a browser and go to http://127.0.0.1:5000/ (or where Flask tells the app is running).
+
