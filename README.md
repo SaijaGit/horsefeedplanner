@@ -102,26 +102,30 @@ Administrators can remove user accounts and modify default feed information and 
 1. Go to the application directory
 
 1. Start venv:
-source venv/bin/activate
+```source venv/bin/activate```
 
 1. Install dependencies:
-pip install -r requirements.txt
+```pip install -r requirements.txt```
 
 1. Create database tables:
-psql < schema.sql
+```psql < schema.sql```
 
-1. Start psql
-Give command \dt. The database should contain tables feeds, horses, nutritions and users.
+1. Start psql with command ```psql```
+   
+1. Give command ```\dt```. The database should contain tables feeds, horses, nutritions and users.
 
-1. Copy-paste the contents of the file starter_content_for_the_database.txt into psql and press enter.
+1. Copy-paste the contents of the file ```starter_content_for_the_database.txt``` into psql and press enter.
 
 1. If you give commands
-  - SELECT * FROM nutrients;
-  - SELECT name FROM feeds;
+   ```SELECT * FROM nutrients;```
+   and 
+   ```SELECT name FROM feeds;```
 you should see data in these tables.
 
 1. Start the application with the command:
-flask run
+```flask run```
 
 1. Start a browser and go to http://127.0.0.1:5000/ (or where Flask tells the app is running).
+
+1. You can test creating an account and logging in, adding your own horses and feeds, and viewing their information.
 
