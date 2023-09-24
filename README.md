@@ -117,7 +117,7 @@ Administrators can remove user accounts and modify default feed information and 
 1. Copy-paste the contents of the file ```starter_content_for_the_database.txt``` into psql and press enter.
 
 1. If you give commands
-   ```SELECT * FROM nutrients;```
+   ```SELECT * FROM nutritions;```
    and 
    ```SELECT name FROM feeds;```
 you should see data in these tables.
