@@ -61,6 +61,28 @@ a:hover {
     <a href="{{ url_for('newhorse') }}">Add a new horse!</a>
 </p>
 
+
+<h3>My Feeds</h3>
+
+{% if feed_list is none %}
+<p>You havent save any own feeds yet, but you can check the default feeds!</p>
+
+{% else %}
+<ul>
+{% for h in feed_list %}
+<li>
+    <a href="{{ url_for('feed', feed_id=h[0]) }}">{{ h[0] }}: {{ h[1] }}</a>
+</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+<p>
+    <a href="{{ url_for('newhorse') }}">Add a new horse!</a>
+</p>
+
+
+
 <a href="/logout">Log out</a>
 {% else %}
 

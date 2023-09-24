@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, request, session, redirect, flash
-import users, horses
+import users, horses, feeds
 
 @app.route("/")
 
@@ -9,8 +9,9 @@ def index():
     print("routes index: user_id=", user_id ) 
     if user_id:
         horse_list = horses.get_ids_and_names()
-        print("routes index: horse_info=", horse_list )
-        return render_template("index.html", horse_list=horse_list)
+        feed_list = feeds.get_ids_and_names()
+        print("routes index: horse_list=", horse_list , " feed_list=", feed_list )
+        return render_template("index.html", horse_list=horse_list, feed_list=feed_list)
     
     else:
         return render_template("index.html")
@@ -73,9 +74,8 @@ def newhorse():
         if not added:
             flash("Failed to add the horse :(", "error")
             return render_template("newhorse.html")
-        
-        horse_names = horses.get_all_names()
-        return render_template("index.html", horse_names=horse_names)
+
+        return redirect("/")
     
 @app.route("/horse/<horse_id>")
 def horse(horse_id):
@@ -91,4 +91,20 @@ def horse(horse_id):
             return render_template("horse.html", horse_info=horse_info)
         else:
             print("routes horse: not the owner")
+            return redirect("/")
+
+@app.route("/feed/<feed_id>")
+def feed(feed_id):
+    user_id = feeds.user_id()
+    feed_info = feeds.get_info(feed_id)
+    print("routes feed: feed info =", feed_info ) 
+    if feed_info == None:
+        return render_template("index.html")
+    
+    else:
+        print("routes feed: user_id =", user_id, " vs. owner_id =", feed_info[2]) 
+        if user_id == feed_info[2]:
+            return render_template("feed.html", feed_info=feed_info)
+        else:
+            print("routes feed: not your feed")
             return redirect("/")
