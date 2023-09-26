@@ -1,0 +1,340 @@
+
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'moisture',
+    'Moisture',
+    'M',
+    '%',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'energy',
+    'Metabolizable energy',
+    'ME',
+    'MJ/kg DM',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'protein',
+    'Protein',
+    'DCP',
+    '%',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'fat',
+    'Fat',
+    'CF',
+    '%',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'fiber',
+    'Fiber',
+    'Fiber',
+    '%',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'starch',
+    'Starch',
+    'ST',
+    '%',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'sugar',
+    'Sugar',
+    'S',
+    '%',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'calcium',
+    'Calcium',
+    'Ca',
+    'g/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'phosphorus',
+    'Phosphorus',
+    'P',
+    'g/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'magnesium',
+    'Magnesium',
+    'Mg',
+    'g/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'sodium',
+    'Sodium',
+    'Na',
+    'g/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'iron',
+    'Iron',
+    'Fe',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'copper',
+    'Copper',
+    'Co',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'manganese',
+    'Manganese',
+    'Mn',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'zinc',
+    'Zinc',
+    'Zn',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'iodine',
+    'Iodine',
+    'I',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'selenium',
+    'Selenium',
+    'Se',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'cobalt',
+    'Cobalt',
+    'Co',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'vitamin_a',
+    'Vitamin A',
+    'Vit. A',
+    'IU/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'vitamin_d3',
+    'Vitamin D3',
+    'Vit. D3',
+    'IU/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'vitamin_e',
+    'Vitamin E',
+    'Vit. E',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'vitamin_b1',
+    'Vitamin B1',
+    'Vit. B1',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'vitamin_b2',
+    'Vitamin B2',
+    'Vit. B2',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'vitamin_b6',
+    'Vitamin B6',
+    'Vit. B6',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'vitamin_b12',
+    'Vitamin B12',
+    'Vit. B12',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'biotin',
+    'Biotin',
+    'Vit. H',
+    'mg/kg',
+    ''
+);
+INSERT INTO nutritions (reference, name, symbol, unit, description) VALUES (
+    'niacin',
+    'Niacin',
+    'Vit. B3',
+    'mg/kg',
+    ''
+);
+INSERT INTO feeds (owner_id, name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus, magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt, vitamin_a, vitamin_d3, vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6, vitamin_b12, biotin, niacin) VALUES (
+    0,
+    'Hay',
+    10,
+    9,
+    7.2,
+    0,
+    0,
+    0,
+    8.3,
+    2.5,
+    1.8,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0);
+INSERT INTO feeds (owner_id, name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus, magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt, vitamin_a, vitamin_d3, vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6, vitamin_b12, biotin, niacin) VALUES (
+    0,
+    'Oats',
+    0,
+    6,
+    11,
+    0,
+    0,
+    0,
+    15.8,
+    0.4,
+    3.1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0);
+INSERT INTO feeds (owner_id, name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus, magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt, vitamin_a, vitamin_d3, vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6, vitamin_b12, biotin, niacin) VALUES (
+    0,
+    'Mineral Plus',
+    0,
+    0,
+    0,
+    0,
+    0,
+    3.4,
+    9.5,
+    90,
+    20,
+    14,
+    15,
+    1060,
+    500,
+    500,
+    1200,
+    13.8,
+    2.8,
+    3.8,
+    90000,
+    9000,
+    4000,
+    45,
+    30,
+    45,
+    0.2,
+    4.5,
+    180);
+INSERT INTO feeds (owner_id, name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus, magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt, vitamin_a, vitamin_d3, vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6, vitamin_b12, biotin, niacin)VALUES (
+    0,
+    'Racing Protein',
+    12,
+    12.3,
+    0,
+    5.2,
+    10.4,
+    5,
+    7.8,
+    5,
+    6.5,
+    2.9,
+    8.8,
+    145,
+    8,
+    42,
+    40,
+    0.4,
+    0.08,
+    0.01,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0);
+INSERT INTO feeds (owner_id, name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus, magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt, vitamin_a, vitamin_d3, vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6, vitamin_b12, biotin, niacin)VALUES (
+    0,
+    'Pellavainen',
+    7,
+    15,
+    25,
+    19,
+    10,
+    0,
+    4,
+    3.5,
+    9.5,
+    0.5,
+    0.5,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0);
