@@ -98,8 +98,18 @@ Administrators can remove user accounts and modify default feed information and 
 - The graphic design of the application is not final. The pages just have a touch of css to make them a little more pleasing to the eye.
 
 ## How to use the app
+1. Get project from github
 
-1. Go to the application directory
+1. Go to the application directory ```/horsefeedplanner/```
+
+1. Create .env file with the following contents:
+
+           DATABASE_URL="postgresql:///user"
+           SECRET_KEY='key'
+    - where user = your username
+    - key = a random 16-character string enclosed within ''-marks
+
+   
 
 1. Start venv:
 ```source venv/bin/activate```
