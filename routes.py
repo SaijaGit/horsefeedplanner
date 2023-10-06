@@ -1,6 +1,6 @@
 from app import app
 from flask import render_template, request, session, redirect, flash
-import users, horses, feeds
+import users, horses, feeds, diets
 
 @app.route("/")
 
@@ -81,20 +81,23 @@ def newhorse():
 def horse(horse_id):
     user_id = users.user_id()
     horse_info = horses.get_info(horse_id)
+    feed_list = feeds.get_ids_and_names()
+    menu = diets.get_info(horse_id)
+
     print("routes horse: horse info =", horse_info ) 
+    print("routes horse: menu =", menu )
     if horse_info == None:
         return render_template("index.html")
     
     else:
         print("routes horse: user_id =", user_id, " vs. owner_id =", horse_info[5]) 
         if user_id == horse_info[5]:
-            return render_template("horse.html", horse_info=horse_info)
+            return render_template("horse.html", horse_info=horse_info, feed_list=feed_list, menu=menu)
         else:
             print("routes horse: not the owner")
             return redirect("/")
 
 
-# routes.py
 
 @app.route("/updatehorse/<horse_id>", methods=["POST"])
 def updatehorse(horse_id):
@@ -106,7 +109,6 @@ def updatehorse(horse_id):
 
     if updated:
         print("routes updatehorse: information updated")
-        flash("Horse information updated successfully", "success")
     else:
         flash("Failed to update horse information", "error")
 
@@ -220,4 +222,22 @@ def editfeed(feed_id):
             return redirect("/feed/" + feed_id)
         
     return render_template("editfeed.html", feed_name=feed_name_owner[0], nutrition_info=nutrition_info, feed_id=feed_id)
+
+
+@app.route('/add_feed_to_diet/<horse_id>', methods=['POST'])
+def add_feed_to_diet(horse_id):
+    print("routes add_feed_to_diet: GOT HERE! horse_id = ", horse_id)
+    if request.method == 'POST':
+
+        print("routes add_feed_to_diet: GOT HERE!!!!! POST")
+
+        feed_id = request.form["feed_id"]
+        amount = request.form["amount"]
+
+        diets.add(horse_id, feed_id, amount)
+        print("routes add_feed_to_diet: horse_id = ", horse_id, ", feed_id = ", feed_id, ", amount = ", amount )
+
+    return redirect("/horse/" + horse_id)
+
+
     

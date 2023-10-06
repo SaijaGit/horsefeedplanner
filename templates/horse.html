@@ -41,15 +41,14 @@ a:hover {
 
 <h2>{{ horse_info[1] }}</h2>
 
-<h3>Horse information</h3>
+<h3>Horse's basic information</h3>
 <p>Horse's id in the Feed Planner: {{ horse_info[0] }}</p>
 <p>Name: {{ horse_info[1] }}</p>
 <p>Year of birth: {{ horse_info[2] }}</p>
 
-<h3>Energy consumption</h3>
+<h3>Horse's energy consumption</h3>
 <p>Weight class: {{ horse_info[3] }} kg</p>
 <p>Excercise level: {{ horse_info[4] }}</p>
-
 
 <form action="/updatehorse/{{ horse_info[0] }}" method="POST">
     <p>
@@ -71,6 +70,34 @@ a:hover {
 
         <input type="submit" value="Save">
 </form>
+
+
+<h3>Horse's diet</h3>
+
+{% if menu%}
+<ul>
+    {% for feed in menu %}
+    <li>Feed id {{ feed[0] }}. {{ feed[1] }}: {{ feed[2] }} g</li>
+    {% endfor %}
+</ul>
+
+{% else %}
+<p>No diet has been created for this horse yet.</p>
+{% endif %}
+
+<form action="/add_feed_to_diet/{{ horse_info[0] }}" method="POST">
+    <p>Add new feed to the horse's diet: </p>
+    <select name="feed_id">
+    {% for feed in feed_list %}
+        <option value="{{ feed[0] }}">{{ feed[1] }}</option>
+    {% endfor %}
+    </select>
+    <input type="text" name="amount" placeholder="Amount (grams)">
+    <input type="submit" value="Save">
+
+</form>
+
+
 
 <p>
     <a href="{{ url_for('index') }}">Back to Home</a>
