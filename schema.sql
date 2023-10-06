@@ -1,7 +1,12 @@
+CREATE TYPE user_role AS ENUM('basic', 'admin');
+
+CREATE TYPE horse_exercise AS ENUM('Rest', 'Light work', 'Moderate work', 'Heavy work');
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE,
-    password TEXT
+    password TEXT,
+    role user_role
 );
 
 CREATE TABLE horses (
@@ -9,7 +14,7 @@ CREATE TABLE horses (
     horse_name TEXT,
     birth_year INT,
     weight_class INT,
-    exercise_level INT,
+    exercise_level horse_exercise,
     owner_id INT
 );
 
@@ -55,5 +60,11 @@ CREATE TABLE nutritions (
     description TEXT
 );
 
+CREATE TABLE diets (
+    id SERIAL PRIMARY KEY,               
+    horse_id INT,
+    feed_id INT,
+    amount INT
+);
 
 

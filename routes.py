@@ -93,6 +93,26 @@ def horse(horse_id):
             print("routes horse: not the owner")
             return redirect("/")
 
+
+# routes.py
+
+@app.route("/updatehorse/<horse_id>", methods=["POST"])
+def updatehorse(horse_id):
+
+    weight_class = request.form["weight_class"]
+    exercise_level = request.form["exercise_level"]
+
+    updated = horses.update(horse_id, weight_class, exercise_level)
+
+    if updated:
+        print("routes updatehorse: information updated")
+        flash("Horse information updated successfully", "success")
+    else:
+        flash("Failed to update horse information", "error")
+
+    return redirect("/horse/" + horse_id)
+
+
 @app.route("/feed/<feed_id>")
 def feed(feed_id):
     user_id = users.user_id()

@@ -45,9 +45,32 @@ a:hover {
 <p>Horse's id in the Feed Planner: {{ horse_info[0] }}</p>
 <p>Name: {{ horse_info[1] }}</p>
 <p>Year of birth: {{ horse_info[2] }}</p>
-<p>Weight class: {{ horse_info[3] }} kg</p>
-<p>Excercise level: {{ horse_info[6] }}</p>
 
+<h3>Energy consumption</h3>
+<p>Weight class: {{ horse_info[3] }} kg</p>
+<p>Excercise level: {{ horse_info[4] }}</p>
+
+
+<form action="/updatehorse/{{ horse_info[0] }}" method="POST">
+    <p>
+        Weight class:
+        <p>
+        <input type="radio" name="weight_class" value="450" {% if horse_info[3] == 450 %}checked{% endif %}> 450 kg
+        <input type="radio" name="weight_class" value="550" {% if horse_info[3] == 550 %}checked{% endif %}> 550 kg
+        <input type="radio" name="weight_class" value="600" {% if horse_info[3] == 600 %}checked{% endif %}> 600 kg
+        
+        <p>
+        Level of exercise:
+        <p>
+        <input type="radio" name="exercise_level" value="Rest" {% if horse_info[4] == 'Rest' %}checked{% endif %}> Rest
+        <input type="radio" name="exercise_level" value="Light work" {% if horse_info[4] == 'Light work' %}checked{% endif %}> Light work
+        <input type="radio" name="exercise_level" value="Moderate work" {% if horse_info[4] == 'Moderate work' %}checked{% endif %}> Moderate work
+        <input type="radio" name="exercise_level" value="Heavy work" {% if horse_info[4] == 'Heavy work' %}checked{% endif %}> Heavy work
+             
+    <p>
+
+        <input type="submit" value="Save">
+</form>
 
 <p>
     <a href="{{ url_for('index') }}">Back to Home</a>

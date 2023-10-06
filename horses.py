@@ -15,16 +15,33 @@ def add(horse_name, birth_year, weight_class, exercise_level):
         return False
     print("horses add: OK") 
     return True
-    
+
+def update(horse_id, weight_class, exercise_level):
+    sql = text("UPDATE horses SET weight_class = :weight_class, exercise_level = :exercise_level WHERE id = :horse_id;")
+    print("horses update: sql =", sql, {"weight_class": weight_class, "exercise_level": exercise_level, "horse_id": horse_id})
+
+    try:
+        db.session.execute(sql, {"weight_class": weight_class, "exercise_level": exercise_level, "horse_id": horse_id})
+        db.session.commit()
+
+    except:
+        print("horses update: except") 
+        return False
+
+    print("horses update: OK") 
+    return True
+
+
 def get_info(horse_id):
     sql = text("SELECT * FROM horses WHERE id=:horse_id")
     result = db.session.execute(sql, {"horse_id":horse_id})
     horse = result.fetchone()
     if not horse:
         return None
-    exercise_levels = ["Rest", "Light work", "Moderate work", "Heavy work"]
+    #exercise_levels = ["Rest", "Light work", "Moderate work", "Heavy work"]
     horse_info = list(horse)
-    horse_info.append(exercise_levels[horse[4]])
+    #horse_info.append(exercise_levels[horse[4]])
+    print("horses get_info: horse_info = ", horse_info)
     return horse_info
 
 def get_ids_and_names():
