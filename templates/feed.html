@@ -43,13 +43,20 @@ a:hover {
 
 <h3>Contents</h3>
 
+{% if nutrition_info %}
 <ul>
     {% for nutrition in nutrition_info %}
     <li>{{ nutrition[0] }} {{ nutrition[1] }}: {{ nutrition[2] }} {{ nutrition[3] }}</li>
     {% endfor %}
 </ul>
 
+{% else %}
+<p>No nutritional information has yet been entered for this feed.</p>
+{% endif %}
 
+<p>
+    <a href="{{ url_for('editfeed', feed_id=feed_id) }}">Edit feed</a>
+</p>
 
 
 <p>

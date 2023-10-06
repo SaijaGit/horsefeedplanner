@@ -108,12 +108,14 @@ def feed(feed_id):
         print("routes feed: not your feed")
         return redirect("/")
     
-    nutrition_info = feeds.get_nutriton_info(feed_id)
+    nutrition_info = feeds.get_nutrition_info(feed_id)
 
-    if nutrition_info:
-        return render_template("feed.html", feed_name=feed_name_owner[0], nutrition_info = nutrition_info)
-    else:
-        return redirect("/")
+    return render_template("feed.html", feed_name=feed_name_owner[0], feed_id=feed_id, nutrition_info = nutrition_info)
+
+    #if nutrition_info:
+    #    return render_template("feed.html", feed_name=feed_name_owner[0], nutrition_info = nutrition_info)
+    #else:
+    #    return redirect("/")
 
 @app.route("/newfeed", methods=["GET", "POST"])
 def newfeed():
@@ -122,33 +124,33 @@ def newfeed():
     
     if request.method == "POST":
         name = request.form["name"]
-        moisture = request.form["moisture"]
-        energy = request.form["energy"]
-        protein = request.form["protein"]
-        fat = request.form["fat"]
-        fiber = request.form["fiber"]
-        starch = request.form["starch"]
-        sugar = request.form["sugar"]
-        calcium = request.form["calcium"]
-        phosphorus = request.form["phosphorus"]
-        magnesium = request.form["magnesium"]
-        sodium = request.form["sodium"]
-        iron = request.form["iron"]
-        copper = request.form["copper"]
-        manganese = request.form["manganese"]
-        zinc = request.form["zinc"]
-        iodine = request.form["iodine"]
-        selenium = request.form["selenium"]
-        cobalt = request.form["cobalt"]
-        vitamin_a = request.form["vitamin_a"]
-        vitamin_d3 = request.form["vitamin_d3"]
-        vitamin_e = request.form["vitamin_e"]
-        vitamin_b1 = request.form["vitamin_b1"]
-        vitamin_b2 = request.form["vitamin_b2"]
-        vitamin_b6 = request.form["vitamin_b6"]
-        vitamin_b12 = request.form["vitamin_b12"]
-        biotin = request.form["biotin"]
-        niacin = request.form["niacin"]
+        moisture = request.form["moisture"] or 0
+        energy = request.form["energy"] or 0
+        protein = request.form["protein"] or 0
+        fat = request.form["fat"] or 0
+        fiber = request.form["fiber"] or 0
+        starch = request.form["starch"] or 0
+        sugar = request.form["sugar"] or 0
+        calcium = request.form["calcium"] or 0
+        phosphorus = request.form["phosphorus"] or 0
+        magnesium = request.form["magnesium"] or 0
+        sodium = request.form["sodium"] or 0
+        iron = request.form["iron"] or 0
+        copper = request.form["copper"] or 0
+        manganese = request.form["manganese"] or 0
+        zinc = request.form["zinc"] or 0
+        iodine = request.form["iodine"] or 0
+        selenium = request.form["selenium"] or 0
+        cobalt = request.form["cobalt"] or 0
+        vitamin_a = request.form["vitamin_a"] or 0
+        vitamin_d3 = request.form["vitamin_d3"] or 0
+        vitamin_e = request.form["vitamin_e"] or 0
+        vitamin_b1 = request.form["vitamin_b1"] or 0
+        vitamin_b2 = request.form["vitamin_b2"] or 0
+        vitamin_b6 = request.form["vitamin_b6"] or 0
+        vitamin_b12 = request.form["vitamin_b12"] or 0
+        biotin = request.form["biotin"] or 0
+        niacin = request.form["niacin"] or 0
 
         print("routes newfeed: feed info =", name, moisture, energy, protein ) 
 
@@ -165,3 +167,37 @@ def newfeed():
             return render_template("newfeed.html")
 
         return redirect("/")
+
+@app.route("/editfeed/<feed_id>", methods=["GET", "POST"])
+def editfeed(feed_id):
+    user_id = users.user_id()
+    feed_name_owner = feeds.get_name_and_owner(feed_id)
+
+    if user_id != feed_name_owner[1] and feed_name_owner[1] != 0:
+        print("routes editfeed: not the owner, user_id =" + user_id + ",  feed_name_owner =" + feed_name_owner)
+        return redirect("/")
+    
+    nutrition_info = feeds.get_nutrition_info(feed_id)
+    
+    if request.method == "POST":
+
+        nutrition = request.form.to_dict()
+        nutrition_without_empty_fields = {}
+
+        for nutrient in nutrition:
+            if nutrition[nutrient] != "": 
+                nutrition_without_empty_fields[nutrient] = nutrition[nutrient]
+    
+        print("routes editfeed: nutrition =" + str(nutrition_without_empty_fields) )
+
+        updated = feeds.update(feed_id, nutrition_without_empty_fields)
+
+        if not updated:
+            flash("Failed to update the feed :(", "error")
+            return render_template("editfeed.html", feed_name=feed_name_owner[0], nutrition_info=nutrition_info, feed_id=feed_id)
+        else:
+            flash("Feed updated")
+            return redirect("/feed/" + feed_id)
+        
+    return render_template("editfeed.html", feed_name=feed_name_owner[0], nutrition_info=nutrition_info, feed_id=feed_id)
+    

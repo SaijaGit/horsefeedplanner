@@ -36,20 +36,20 @@ a:hover {
 </head>
 <body>
 
-    <h1>Horse Feed Planner</h1>
+<h1>Horse Feed planner!</h1>
+<p>You are logged in as {{ session.username }}</p>
 
-    <h2>Add a new feed!</h2>
+<h2>{{ feed_name }}</h2>
 
-    <p><br></p>
+<h3>Contents</h3>
 
-    <h3>Fill in the information, put 0 into fields you dont know the value of!!!!!</h3>
+<p>Edit the nutriton information</p>
 
-<form action="/newfeed" method="POST">
+<form action="{{ url_for('editfeed', feed_id=feed_id) }}" method="POST">
     <p>Feed's name: 
-    <input type="text" name="name" required>
-
+        <input type="text" name="name">
     <p>Moisture
-    <input type="text" name="moisture"> %
+    <input type="text" name="moisture" value="{{ nutrition_info.moisture if nutrition_info else '' }}"> %
     
     <p>Metabolizable energy
     <input type="text" name="energy"> MJ/kg DM
@@ -133,19 +133,16 @@ a:hover {
     <input type="submit" value="Save">
 </form>
 
-{% with messages = get_flashed_messages() %}
- {% if messages %}
-  <ul>
-  {% for message in messages %}
-    <li>{{ message }}</li>
-  {% endfor %}
-  </ul>
- {% endif %}
-{% endwith %}
+<p>
+    <a href="{{ url_for('feed', feed_id=feed_id) }}">Back to Feed Info</a>
+</p>
 
 <p>
     <a href="{{ url_for('index') }}">Back to Home</a>
 </p>
+
+<a href="/logout">Log out</a>
+
 
 </body>
 </html>

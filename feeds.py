@@ -34,6 +34,33 @@ def add(name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, pho
         return False
     print("feeds add: OK") 
     return True
+
+
+def update(feed_id, nutrition):
+    user_id= users.user_id()
+    nutrients_to_update = []
+
+    for nutrient, value in nutrition.items():
+        nutrients_to_update.append(f"{nutrient} = '{value}'")
+
+    if not nutrients_to_update:
+        print("feeds update: No data to update")
+        return False
+
+    sql_nutrients = ", ".join(nutrients_to_update)
+    sql = text(f"""UPDATE feeds SET {sql_nutrients} WHERE id = {feed_id};""")
+
+    try:
+        db.session.execute(sql)
+        db.session.commit()
+
+    except:
+        print("feeds update: except") 
+        return False
+
+    print("feeds update: OK") 
+    return True
+
     
 def get_name_and_owner(feed_id):
     sql = text("SELECT name, owner_id FROM feeds WHERE id=:feed_id")
@@ -70,7 +97,7 @@ def get_ids_and_names():
 # Nyt on tällainen versio, että saan edes jotain testattavaa palautettua 2. välipalautukseen.
 # Otan tästä mielelläni parannusehdotuksia vastaan, ja jatkan yrittämistä seuraavaan välipalautukseen.
 
-def get_nutriton_info(feed_id):
+def get_nutrition_info(feed_id):
     sql_feed = text("SELECT * FROM feeds WHERE id=:feed_id")
 
     result_feed = db.session.execute(sql_feed, {"feed_id": feed_id})
@@ -91,7 +118,8 @@ def get_nutriton_info(feed_id):
             nutrition= result_nutrition.fetchone()
 
             if nutrition :
-                data.append((nutrition[0], nutrition[1], feed[index], nutrition[2]))
+                if feed[index] != 0 :
+                    data.append((nutrition[0], nutrition[1], feed[index], nutrition[2]))
 
     print("feeds get_nutriton_info: data = ", data)
     return data
