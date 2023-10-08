@@ -90,6 +90,13 @@ Administrators can remove user accounts and modify default feed information and 
 - Possibility to add own horses into database
 - Possibiity to add own feeds into database
 
+## Status at 8.10.2023
+### New features:
+- Horses weight class and excercise level can be edited
+- User can edit their own feeds
+- Diets can be created and edited for horses
+- Nutritional calculation of the horse's diet is shown
+
 ### Remarks:
 - The presentation and processing of feed information is still at an early stage. Entering feed information is difficult,
   as the program requires you to fill in all fields at this stage. The control of who has access to which feed's information is also incomplete.
