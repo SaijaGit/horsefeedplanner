@@ -21,6 +21,7 @@ h2{
 h3 {
     text-align: left;
     color: #556b2f;
+    margin-top: 3em;
 }
 
 a {
@@ -30,6 +31,31 @@ a {
 }
 a:hover {
     text-decoration: underline;
+}
+
+
+li {
+    margin-bottom: 2em;
+}
+
+input[type="text"] {
+    width: 100px;
+}
+
+
+table {
+    background-color: white;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid #556b2f;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+    font-size: 0.8em;
 }
 
 </style>
@@ -75,13 +101,16 @@ a:hover {
 <h3>Horse's diet</h3>
 
 {% if menu%}
+
+<p><strong>Unfortunately, please do not enter decimal numbers for feed amounts!
+    <br> This is a known bug that causes terrible things to happen!</strong>
 <ul>
     {% for feed in menu %}
-    <li>Feed id {{ feed[0] }}. {{ feed[1] }}: {{ feed[2] }} g</li>
+    <li><p>Feed id {{ feed[0] }}. {{ feed[1] }}: {{ feed[2] }} kg
 
     <form action="/updatediet/{{ horse_info[0] }}" method="POST" style="display: inline;">
         <input type="hidden" name="feed_id" value="{{ feed[0] }}">
-        <input type="text" name="amount" placeholder="Amount (grams)">
+        <input type="text" name="amount" placeholder="Amount (kg)">
         <input type="submit" value="Save changes">
     </form>
 
@@ -89,7 +118,7 @@ a:hover {
         <input type="hidden" name="feed_id" value="{{ feed[0] }}">
         <input type="submit" value="Remove from diet">
     </form>
-
+    </li>
     {% endfor %}
 </ul>
 
@@ -97,17 +126,42 @@ a:hover {
 <p>No diet has been created for this horse yet.</p>
 {% endif %}
 
+<p><strong>Unfortunately, please do not enter decimal numbers for feed amounts!
+    <br> This is a known bug that causes terrible things to happen!</strong>
+
 <form action="/add_feed_to_diet/{{ horse_info[0] }}" method="POST">
     <p>Add new feed to the horse's diet: </p>
+
+
+
     <select name="feed_id">
     {% for feed in feed_list %}
         <option value="{{ feed[0] }}">{{ feed[1] }}</option>
     {% endfor %}
     </select>
-    <input type="text" name="amount" placeholder="Amount (grams)">
+    <input type="text" name="amount" placeholder="Amount (kg)">
     <input type="submit" value="Save">
 
 </form>
+
+
+{% if nutrition%}
+<h3>Nutrients</h3>
+<table>
+    <tbody>
+        {% for row in nutrition %}
+            <tr>
+                {% for cell in row %}
+                    <td>{{ cell }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endif %}
+
 
 
 

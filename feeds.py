@@ -89,13 +89,39 @@ def get_ids_and_names():
         return [(row[0], row[1]) for row in rows]
     
 
-# Tässä olisi tarkotus hakea tietylle rehulle feeds-taulusta vain ne ravintoarvot, jotka eivät ole nollia, 
-# ja hakea näille arvoille nimet ja yksiköt nutritions-taulusta, ja palauttaa ne listana tupleja esim. 
-# [("Moisture", "M", 50, "%"), ("Metabolizable energy", "ME", 10, "MJ/kg DM"), ("Protein", "DCP", 5, "%" ), ... ]
-# Olen yrittänyt koko päivän tehdä sitä jotenkin fiksusti yhdistelemällä SQL-kyselyitä, mutta heikoin tuloksin.
-# Voi olla, että joudun tekemään (taas) koko taulujen rakenteen uusiksi.
-# Nyt on tällainen versio, että saan edes jotain testattavaa palautettua 2. välipalautukseen.
-# Otan tästä mielelläni parannusehdotuksia vastaan, ja jatkan yrittämistä seuraavaan välipalautukseen.
+
+def get_nutrients_for_feed(feed_id):
+    sql_feed = text("""SELECT name, moisture, energy, protein, fat, fiber, starch, 
+                    sugar, calcium, phosphorus, magnesium, sodium, iron, copper, manganese, 
+                    zinc, iodine, selenium, cobalt, vitamin_a, vitamin_d3, vitamin_e, 
+                    vitamin_b1, vitamin_b2, vitamin_b6, vitamin_b12,  biotin, niacin 
+                    FROM feeds WHERE id=:feed_id""")
+
+    result_feed = db.session.execute(sql_feed, {"feed_id": feed_id})
+    feed = result_feed.fetchone()
+    print("feeds get_nutrients_for_feed: feed = ", feed)
+    if not feed:
+        return None
+    
+    else:
+        return feed
+
+def get_basic_nutrition_info_NOT_WORKING(feed_id):
+    feed = get_nutrients_for_feed(feed_id)
+    print("feeds get_nutriton_info: feed = ", feed)
+    if not feed:
+        return None
+
+    print("feeds get_nutriton_info: feed = ", feed)
+
+    data = []
+
+    for nutrient in feed:
+        if nutrient != 0 :
+            data.append(nutrient)
+
+    print("feeds get_nutriton_info: data = ", data)
+    return data
 
 def get_nutrition_info(feed_id):
     sql_feed = text("SELECT * FROM feeds WHERE id=:feed_id")
