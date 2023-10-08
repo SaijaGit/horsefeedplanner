@@ -64,7 +64,7 @@ CREATE TABLE diets (
     id SERIAL PRIMARY KEY,               
     horse_id INT,
     feed_id INT,
-    amount INT
+    amount FLOAT
 );
 
 
