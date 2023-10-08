@@ -240,4 +240,30 @@ def add_feed_to_diet(horse_id):
     return redirect("/horse/" + horse_id)
 
 
-    
+@app.route('/updatediet/<horse_id>', methods= ['POST'] )
+def updatediet(horse_id):
+    print("routes updatediet: GOT HERE! horse_id = ", horse_id)
+    if request.method == 'POST':
+
+        print("routes updatediet: GOT HERE!!!!! POST")
+
+        feed_id = request.form["feed_id"]
+        amount = request.form["amount"]
+
+        diets.update(horse_id, feed_id, amount)
+        print("routes updatediet: horse_id = ", horse_id, ", feed_id = ", feed_id, ", amount = ", amount )
+
+    return redirect("/horse/" + horse_id)
+
+@app.route('/deletefeed/<horse_id>', methods= ['POST'] )
+def deletefeed(horse_id):
+    print("routes deletefeed: GOT HERE! horse_id = ", horse_id)
+    if request.method == 'POST':
+
+        feed_id = request.form["feed_id"]
+        print("routes deletefeed: feed_id = ", feed_id)
+
+        diets.delete(horse_id, feed_id)
+        print("routes deletefeed: horse_id = ", horse_id, ", feed_id = ", feed_id )
+
+    return redirect("/horse/" + horse_id)

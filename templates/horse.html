@@ -78,6 +78,18 @@ a:hover {
 <ul>
     {% for feed in menu %}
     <li>Feed id {{ feed[0] }}. {{ feed[1] }}: {{ feed[2] }} g</li>
+
+    <form action="/updatediet/{{ horse_info[0] }}" method="POST" style="display: inline;">
+        <input type="hidden" name="feed_id" value="{{ feed[0] }}">
+        <input type="text" name="amount" placeholder="Amount (grams)">
+        <input type="submit" value="Save changes">
+    </form>
+
+    <form action="/deletefeed/{{ horse_info[0] }}" method="POST" style="display: inline;">
+        <input type="hidden" name="feed_id" value="{{ feed[0] }}">
+        <input type="submit" value="Remove from diet">
+    </form>
+
     {% endfor %}
 </ul>
 
