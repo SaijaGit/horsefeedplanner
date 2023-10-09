@@ -36,7 +36,7 @@ a:hover {
 </head>
 <body>
 
-<h1>Horse Feed planner!</h1>
+<h1>Horse Feed Planner</h1>
 <p>You are logged in as {{ session.username }}  {{ session.user_id }}</p>
 
 <h2>{{ feed_name }}</h2>
@@ -58,6 +58,8 @@ a:hover {
 {% if feed_owner  == session.user_id %}
 <p>
     <a href="{{ url_for('editfeed', feed_id=feed_id) }}">Edit feed</a>
+    <br>
+    <a href="{{ url_for('deletefeed', feed_id=feed_id) }}">Delete feed from database</a>
 </p>
 {% else %}
 <p>This is a defaut feed that can not be edited.</p>
