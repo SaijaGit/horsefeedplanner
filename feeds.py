@@ -78,10 +78,17 @@ def get_nutrition(reference):
         return None
     return nutririon
 
-def get_ids_and_names():
-    user_id = users.user_id()
-    sql = text("SELECT id, name FROM feeds") # WHERE (owner_id=:owner_id OR owner_id=0")
-    result = db.session.execute(sql) #, {"owner_id": user_id})
+def get_ids_and_names(whose="own"):
+    user_id= users.user_id()
+    if whose == "own":
+        sql = text("SELECT id, name FROM feeds WHERE owner_id=:user_id")
+    elif whose == "default":
+        sql = text("SELECT id, name FROM feeds WHERE owner_id=0")
+    elif whose == "all":
+        sql = text("SELECT id, name FROM feeds WHERE owner_id=:user_id OR owner_id=0")
+    else:
+        return None
+    result = db.session.execute(sql, {"user_id": user_id})
     rows = result.fetchall()
     if not rows:
         return None

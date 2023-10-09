@@ -18,7 +18,7 @@ def add(horse_id, feed_id, add_amount):
         return new(horse_id, feed_id, add_amount)
     
     else :
-        new_amount = amount[0][0] + int(add_amount)
+        new_amount = amount[0][0] + float(add_amount)
         return update(horse_id, feed_id, new_amount)
 
 
@@ -123,7 +123,19 @@ def get_nutrient_amounts(horse_id):
     if not result_data:
         return None
 
-    nutrient_amounts = list(result_data)
+    raw_data = list(result_data)
+
+    nutrient_amounts = []
+    for i in range(len(raw_data)):
+        for j in range(len(raw_data[i])):
+            if j == 0:
+                row = [raw_data[i][0]]
+            else:
+                row.append(format_value(raw_data[i][j]))
+        nutrient_amounts.append(row)
+
+
+    
     print("diets get_nutrient_amounts: nutrient_amounts = ", nutrient_amounts)
     return nutrient_amounts
 
@@ -161,7 +173,11 @@ def get_nutrient_totals(horse_id):
     if not result_data:
         return None
 
-    nutrient_totals = list(result_data[0])
+    raw_data = list(result_data[0])
+
+    nutrient_totals = []
+    for data in raw_data:
+        nutrient_totals.append(format_value(data))
     print("diets get_nutrient_totals: nutrient_totals = ", nutrient_totals)
     return nutrient_totals
 
@@ -214,3 +230,23 @@ def get_nutrition_table(horse_id):
     print("diets get_nutrition_table: nutrition_table = ",  nutrition_table)
 
     return nutrition_table
+
+def format_value(value):
+    print("diets format_value: value *1 = ",  value)
+    number = float(value)
+    print("diets format_value: number *1 = ",  number)
+    if number.is_integer():
+        print("diets format_value: number *2 = ",  str(int(number)))
+        return str(int(number))
+    elif number > 1:
+        print("diets format_value: number *3 = ",  "{:.1f}".format(number))
+        return "{:.1f}".format(number)
+    elif 0.1 <= number < 1:
+        print("diets format_value: number *4 = ",  "{:.1f}".format(number))
+        return "{:.2f}".format(number)
+    elif 0.01 <= number < 0.1:
+        return "{:.3f}".format(number)
+    elif 0.001 <= number < 0.01:
+        return "{:.4f}".format(number)
+    elif number < 0.001:
+        return "{:.5f}".format(number)

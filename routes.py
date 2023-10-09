@@ -9,9 +9,10 @@ def index():
     print("routes index: user_id=", user_id ) 
     if user_id:
         horse_list = horses.get_ids_and_names()
-        feed_list = feeds.get_ids_and_names()
-        print("routes index: horse_list=", horse_list , " feed_list=", feed_list )
-        return render_template("index.html", horse_list=horse_list, feed_list=feed_list)
+        own_feed_list = feeds.get_ids_and_names("own")
+        default_feed_list = feeds.get_ids_and_names("default")
+        print("routes index: horse_list=", horse_list , " own_feed_list=", own_feed_list )
+        return render_template("index.html", horse_list=horse_list, own_feed_list=own_feed_list, default_feed_list = default_feed_list)
     
     else:
         return render_template("index.html")
@@ -81,7 +82,7 @@ def newhorse():
 def horse(horse_id):
     user_id = users.user_id()
     horse_info = horses.get_info(horse_id)
-    feed_list = feeds.get_ids_and_names()
+    feed_list = feeds.get_ids_and_names("all")
     menu = diets.get_info(horse_id)
     nutrition = diets.get_nutrition_table(horse_id)
 
@@ -133,7 +134,7 @@ def feed(feed_id):
     
     nutrition_info = feeds.get_nutrition_info(feed_id)
 
-    return render_template("feed.html", feed_name=feed_name_owner[0], feed_id=feed_id, nutrition_info = nutrition_info)
+    return render_template("feed.html", feed_name=feed_name_owner[0], feed_owner=feed_name_owner[1], feed_id=feed_id, nutrition_info = nutrition_info)
 
     #if nutrition_info:
     #    return render_template("feed.html", feed_name=feed_name_owner[0], nutrition_info = nutrition_info)
@@ -147,33 +148,33 @@ def newfeed():
     
     if request.method == "POST":
         name = request.form["name"]
-        moisture = request.form["moisture"] or 0
-        energy = request.form["energy"] or 0
-        protein = request.form["protein"] or 0
-        fat = request.form["fat"] or 0
-        fiber = request.form["fiber"] or 0
-        starch = request.form["starch"] or 0
-        sugar = request.form["sugar"] or 0
-        calcium = request.form["calcium"] or 0
-        phosphorus = request.form["phosphorus"] or 0
-        magnesium = request.form["magnesium"] or 0
-        sodium = request.form["sodium"] or 0
-        iron = request.form["iron"] or 0
-        copper = request.form["copper"] or 0
-        manganese = request.form["manganese"] or 0
-        zinc = request.form["zinc"] or 0
-        iodine = request.form["iodine"] or 0
-        selenium = request.form["selenium"] or 0
-        cobalt = request.form["cobalt"] or 0
-        vitamin_a = request.form["vitamin_a"] or 0
-        vitamin_d3 = request.form["vitamin_d3"] or 0
-        vitamin_e = request.form["vitamin_e"] or 0
-        vitamin_b1 = request.form["vitamin_b1"] or 0
-        vitamin_b2 = request.form["vitamin_b2"] or 0
-        vitamin_b6 = request.form["vitamin_b6"] or 0
-        vitamin_b12 = request.form["vitamin_b12"] or 0
-        biotin = request.form["biotin"] or 0
-        niacin = request.form["niacin"] or 0
+        moisture = request.form["moisture"].replace(",", ".") or 0
+        energy = request.form["energy"].replace(",", ".") or 0
+        protein = request.form["protein"].replace(",", ".") or 0
+        fat = request.form["fat"].replace(",", ".") or 0
+        fiber = request.form["fiber"].replace(",", ".") or 0
+        starch = request.form["starch"].replace(",", ".") or 0
+        sugar = request.form["sugar"].replace(",", ".") or 0
+        calcium = request.form["calcium"].replace(",", ".") or 0
+        phosphorus = request.form["phosphorus"].replace(",", ".") or 0
+        magnesium = request.form["magnesium"].replace(",", ".") or 0
+        sodium = request.form["sodium"].replace(",", ".") or 0
+        iron = request.form["iron"].replace(",", ".") or 0
+        copper = request.form["copper"].replace(",", ".") or 0
+        manganese = request.form["manganese"].replace(",", ".") or 0
+        zinc = request.form["zinc"].replace(",", ".") or 0
+        iodine = request.form["iodine"].replace(",", ".") or 0
+        selenium = request.form["selenium"].replace(",", ".") or 0
+        cobalt = request.form["cobalt"].replace(",", ".") or 0
+        vitamin_a = request.form["vitamin_a"].replace(",", ".") or 0
+        vitamin_d3 = request.form["vitamin_d3"].replace(",", ".") or 0
+        vitamin_e = request.form["vitamin_e"].replace(",", ".") or 0
+        vitamin_b1 = request.form["vitamin_b1"].replace(",", ".") or 0
+        vitamin_b2 = request.form["vitamin_b2"].replace(",", ".") or 0
+        vitamin_b6 = request.form["vitamin_b6"].replace(",", ".") or 0
+        vitamin_b12 = request.form["vitamin_b12"].replace(",", ".") or 0
+        biotin = request.form["biotin"].replace(",", ".") or 0
+        niacin = request.form["niacin"].replace(",", ".") or 0
 
         print("routes newfeed: feed info =", name, moisture, energy, protein ) 
 
@@ -200,7 +201,8 @@ def editfeed(feed_id):
         print("routes editfeed: not the owner, user_id =" + user_id + ",  feed_name_owner =" + feed_name_owner)
         return redirect("/")
     
-    nutrition_info = feeds.get_nutrition_info(feed_id)
+    feed_old_values = feeds.get_nutrients_for_feed(feed_id)
+    print("routes editfeed: feed_old_values =", feed_old_values )
     
     if request.method == "POST":
 
@@ -209,7 +211,7 @@ def editfeed(feed_id):
 
         for nutrient in nutrition:
             if nutrition[nutrient] != "": 
-                nutrition_without_empty_fields[nutrient] = nutrition[nutrient]
+                nutrition_without_empty_fields[nutrient] = nutrition[nutrient].replace(",", ".")
     
         print("routes editfeed: nutrition =" + str(nutrition_without_empty_fields) )
 
@@ -217,12 +219,12 @@ def editfeed(feed_id):
 
         if not updated:
             flash("Failed to update the feed :(", "error")
-            return render_template("editfeed.html", feed_name=feed_name_owner[0], nutrition_info=nutrition_info, feed_id=feed_id)
+            return render_template("editfeed.html", feed_name=feed_name_owner[0], feed_old_values=feed_old_values, feed_id=feed_id)
         else:
             flash("Feed updated")
             return redirect("/feed/" + feed_id)
         
-    return render_template("editfeed.html", feed_name=feed_name_owner[0], nutrition_info=nutrition_info, feed_id=feed_id)
+    return render_template("editfeed.html", feed_name=feed_name_owner[0], feed_old_values=feed_old_values, feed_id=feed_id)
 
 
 @app.route('/add_feed_to_diet/<horse_id>', methods=['POST'])
@@ -233,13 +235,13 @@ def add_feed_to_diet(horse_id):
         print("routes add_feed_to_diet: GOT HERE!!!!! POST")
 
         feed_id = request.form["feed_id"]
-        amount = request.form["amount"]
+        amount = request.form["amount"].replace(",", ".")
 
-        try:
-            amount = float(amount)
-        except ValueError:
-            flash("Amount must be a valid decimal number!", "error")
-            return redirect("/horse/" + horse_id)
+        #try:
+        #    amount = float(amount)
+        #except ValueError:
+        #    flash("Amount must be a valid decimal number!", "error")
+        #    return redirect("/horse/" + horse_id)
 
         diets.add(horse_id, feed_id, amount)
         print("routes add_feed_to_diet: horse_id = ", horse_id, ", feed_id = ", feed_id, ", amount = ", amount )
@@ -255,13 +257,13 @@ def updatediet(horse_id):
         print("routes updatediet: GOT HERE!!!!! POST")
 
         feed_id = request.form["feed_id"]
-        amount = request.form["amount"]
+        amount = request.form["amount"].replace(",", ".")
 
-        try:
-            amount = float(amount)
-        except ValueError:
-            flash("Amount must be a valid decimal number!", "error")
-            return redirect("/horse/" + horse_id)
+        #try:
+        #    amount = float(amount)
+        #except ValueError:
+        #    flash("Amount must be a valid decimal number!", "error")
+        #    return redirect("/horse/" + horse_id)
 
         diets.update(horse_id, feed_id, amount)
         print("routes updatediet: horse_id = ", horse_id, ", feed_id = ", feed_id, ", amount = ", amount )

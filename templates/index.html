@@ -62,26 +62,35 @@ a:hover {
 </p>
 
 
-<h3>All the Feeds</h3>
-<p>In this version of the app the feeds from all the users are listed here, but you can only see the info of your own ones. 
-    This will be changed.</p>
+<h3>My Feeds</h3>
 
-{% if feed_list is none %}
-<p>You havent save any own feeds yet, but you can check the default feeds!</p>
+{% if own_feed_list is none %}
+<p>You haven't saved any own feeds yet, but you can check the default feeds!</p>
 
 {% else %}
 <ul>
-{% for h in feed_list %}
+{% for f in own_feed_list %}
 <li>
-    <a href="{{ url_for('feed', feed_id=h[0]) }}">{{ h[0] }}: {{ h[1] }}</a>
+    <a href="{{ url_for('feed', feed_id=f[0]) }}">{{ f[0] }}: {{ f[1] }}</a>
 </li>
 {% endfor %}
 </ul>
 {% endif %}
 
 <p>
-    <a href="{{ url_for('newfeed') }}">Add a new feed!</a>
+    <a href="{{ url_for('newfeed') }}">Add new feed!</a>
 </p>
+
+
+<h3>Default Feeds</h3>
+
+<ul>
+{% for f in default_feed_list %}
+<li>
+    <a href="{{ url_for('feed', feed_id=f[0]) }}">{{ f[0] }}: {{ f[1] }}</a>
+</li>
+{% endfor %}
+</ul>
 
 
 

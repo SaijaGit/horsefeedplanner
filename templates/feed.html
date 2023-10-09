@@ -37,7 +37,7 @@ a:hover {
 <body>
 
 <h1>Horse Feed planner!</h1>
-<p>You are logged in as {{ session.username }}</p>
+<p>You are logged in as {{ session.username }}  {{ session.user_id }}</p>
 
 <h2>{{ feed_name }}</h2>
 
@@ -54,10 +54,14 @@ a:hover {
 <p>No nutritional information has yet been entered for this feed.</p>
 {% endif %}
 
+
+{% if feed_owner  == session.user_id %}
 <p>
     <a href="{{ url_for('editfeed', feed_id=feed_id) }}">Edit feed</a>
 </p>
-
+{% else %}
+<p>This is a defaut feed that can not be edited.</p>
+{% endif %}
 
 <p>
     <a href="{{ url_for('index') }}">Back to Home</a>

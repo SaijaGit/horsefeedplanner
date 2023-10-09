@@ -36,98 +36,103 @@ a:hover {
 </head>
 <body>
 
-<h1>Horse Feed planner!</h1>
+<h1>Horse Feed Planner</h1>
 <p>You are logged in as {{ session.username }}</p>
 
 <h2>{{ feed_name }}</h2>
 
+<h3>Edit feed</h3>
+
+<p>If the nutritional values of the feed are given in the form "unit / kg of dry matter", enter the moisture percentage in the "moisture" field. 
+    <br>Otherwise, set the "moisture" field to 0.</p>
+
+<p>It is not necessary to fill in all fields, if you don't know all the values.</p>
+
 <h3>Contents</h3>
 
-<p>Edit the nutriton information</p>
-
 <form action="{{ url_for('editfeed', feed_id=feed_id) }}" method="POST">
-    <p>Feed's name: 
-        <input type="text" name="name">
+    <p>Name of the feed: 
+        <input type="text" name="name" value="{{ feed_name }}">
     <p>Moisture
-    <input type="text" name="moisture" value="{{ nutrition_info.moisture if nutrition_info else '' }}"> %
+    <input type="text" name="moisture" value="{{ feed_old_values[1] }}" pattern="^\d*([\.,]?\d+)?$"> %
     
     <p>Metabolizable energy
-    <input type="text" name="energy"> MJ/kg DM
-
+    <input type="text" name="energy" value="{{ feed_old_values[2] }}" pattern="^\d*([\.,]?\d+)?$"> MJ/kg DM
+    
     <p>Protein
-    <input type="text" name="protein"> %
+    <input type="text" name="protein" value="{{ feed_old_values[3] }}" pattern="^\d*([\.,]?\d+)?$"> %
     
     <p>Fat
-    <input type="text" name="fat"> %
+    <input type="text" name="fat" value="{{ feed_old_values[4] }}" pattern="^\d*([\.,]?\d+)?$"> %
     
     <p>Fiber
-    <input type="text" name="fiber"> %
+    <input type="text" name="fiber" value="{{ feed_old_values[5] }}" pattern="^\d*([\.,]?\d+)?$"> %
     
     <p>Starch
-    <input type="text" name="starch"> %
+    <input type="text" name="starch" value="{{ feed_old_values[6] }}" pattern="^\d*([\.,]?\d+)?$"> %
     
     <p>Sugar
-    <input type="text" name="sugar"> %
+    <input type="text" name="sugar" value="{{ feed_old_values[7] }}" pattern="^\d*([\.,]?\d+)?$"> %
     
     <p>Calcium
-    <input type="text" name="calcium"> g/kg
+    <input type="text" name="calcium" value="{{ feed_old_values[8] }}" pattern="^\d*([\.,]?\d+)?$"> g/kg
     
     <p>Phosphorus
-    <input type="text" name="phosphorus"> g/kg
+    <input type="text" name="phosphorus" value="{{ feed_old_values[9] }}" pattern="^\d*([\.,]?\d+)?$"> g/kg
     
     <p>Magnesium
-    <input type="text" name="magnesium"> g/kg
+    <input type="text" name="magnesium" value="{{ feed_old_values[10] }}" pattern="^\d*([\.,]?\d+)?$"> g/kg
     
     <p>Sodium
-    <input type="text" name="sodium"> g/kg
+    <input type="text" name="sodium" value="{{ feed_old_values[11] }}" pattern="^\d*([\.,]?\d+)?$"> g/kg
     
     <p>Iron
-    <input type="text" name="iron"> mg/kg
+    <input type="text" name="iron" value="{{ feed_old_values[12] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Copper
-    <input type="text" name="copper"> mg/kg
+    <input type="text" name="copper" value="{{ feed_old_values[13] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Manganese
-    <input type="text" name="manganese"> mg/kg
+    <input type="text" name="manganese" value="{{ feed_old_values[14] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Zinc
-    <input type="text" name="zinc"> mg/kg
+    <input type="text" name="zinc" value="{{ feed_old_values[15] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Iodine
-    <input type="text" name="iodine"> mg/kg
+    <input type="text" name="iodine" value="{{ feed_old_values[16] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Selenium
-    <input type="text" name="selenium"> mg/kg
+    <input type="text" name="selenium" value="{{ feed_old_values[17] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Cobalt
-    <input type="text" name="cobalt"> mg/kg
+    <input type="text" name="cobalt" value="{{ feed_old_values[18] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Vitamin A
-    <input type="text" name="vitamin_a"> IU/kg
+    <input type="text" name="vitamin_a" value="{{ feed_old_values[19] }}" pattern="^\d*([\.,]?\d+)?$"> IU/kg
     
     <p>Vitamin D3
-    <input type="text" name="vitamin_d3"> IU/kg
+    <input type="text" name="vitamin_d3" value="{{ feed_old_values[20] }}" pattern="^\d*([\.,]?\d+)?$"> IU/kg
     
     <p>Vitamin E
-    <input type="text" name="vitamin_e"> mg/kg
+    <input type="text" name="vitamin_e" value="{{ feed_old_values[21] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Vitamin B1
-    <input type="text" name="vitamin_b1"> mg/kg
+    <input type="text" name="vitamin_b1" value="{{ feed_old_values[22] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Vitamin B2
-    <input type="text" name="vitamin_b2"> mg/kg
+    <input type="text" name="vitamin_b2" value="{{ feed_old_values[23] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Vitamin B6
-    <input type="text" name="vitamin_b6"> mg/kg
+    <input type="text" name="vitamin_b6" value="{{ feed_old_values[24] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Vitamin B12
-    <input type="text" name="vitamin_b12"> mg/kg
+    <input type="text" name="vitamin_b12" value="{{ feed_old_values[25] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Biotin
-    <input type="text" name="biotin"> mg/kg
+    <input type="text" name="biotin" value="{{ feed_old_values[26] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
     
     <p>Niacin
-    <input type="text" name="niacin"> mg/kg
+    <input type="text" name="niacin" value="{{ feed_old_values[27] }}" pattern="^\d*([\.,]?\d+)?$"> mg/kg
 
     <p>
     <input type="submit" value="Save">

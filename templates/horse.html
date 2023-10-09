@@ -62,7 +62,7 @@ th, td {
 </head>
 <body>
 
-<h1>Horse Feed planner!</h1>
+<h1>Horse Feed Planner</h1>
 <p>You are logged in as {{ session.username }}</p>
 
 <h2>{{ horse_info[1] }}</h2>
@@ -102,15 +102,13 @@ th, td {
 
 {% if menu%}
 
-<p><strong>Unfortunately, please do not enter decimal numbers for feed amounts!
-    <br> This is a known bug that causes terrible things to happen!</strong>
 <ul>
     {% for feed in menu %}
     <li><p>Feed id {{ feed[0] }}. {{ feed[1] }}: {{ feed[2] }} kg
 
     <form action="/updatediet/{{ horse_info[0] }}" method="POST" style="display: inline;">
         <input type="hidden" name="feed_id" value="{{ feed[0] }}">
-        <input type="text" name="amount" placeholder="Amount (kg)">
+        <input type="text" name="amount" placeholder="Amount (kg)" pattern="^\d*([\.,]?\d+)?$">
         <input type="submit" value="Save changes">
     </form>
 
@@ -126,8 +124,6 @@ th, td {
 <p>No diet has been created for this horse yet.</p>
 {% endif %}
 
-<p><strong>Unfortunately, please do not enter decimal numbers for feed amounts!
-    <br> This is a known bug that causes terrible things to happen!</strong>
 
 <form action="/add_feed_to_diet/{{ horse_info[0] }}" method="POST">
     <p>Add new feed to the horse's diet: </p>
