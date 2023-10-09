@@ -64,7 +64,8 @@ CREATE TABLE diets (
     id SERIAL PRIMARY KEY,               
     horse_id INT,
     feed_id INT,
-    amount FLOAT
+    amount FLOAT,
+    FOREIGN KEY (feed_id) REFERENCES feeds (id) ON DELETE CASCADE
 );
 
 
