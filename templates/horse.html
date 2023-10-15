@@ -1,69 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-
-body {
-    background-color: #f0f0f0; 
-    font-family: Arial, sans-serif;
-}
-h1{
-    text-align: center;
-    color: #556b2f;
-}
-
-h2{
-    text-align: center;
-    color: #807156;
-}
+{% extends "layout.html" %}
 
 
-h3 {
-    text-align: left;
-    color: #556b2f;
-    margin-top: 3em;
-}
+{% if session.user_id %}
+    {% block content %}
+        <p>You are logged in as {{ session.username }}</p>
 
-a {
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-}
-a:hover {
-    text-decoration: underline;
-}
-
-
-li {
-    margin-bottom: 2em;
-}
-
-input[type="text"] {
-    width: 100px;
-}
-
-
-table {
-    background-color: white;
-    border-collapse: collapse;
-}
-
-table, th, td {
-    border: 1px solid #556b2f;
-}
-
-th, td {
-    padding: 8px;
-    text-align: left;
-    font-size: 0.8em;
-}
-
-</style>
-</head>
-<body>
-
-<h1>Horse Feed Planner</h1>
-<p>You are logged in as {{ session.username }}</p>
+        <div class="section">
 
 <h2>{{ horse_info[1] }}</h2>
 
@@ -71,7 +13,9 @@ th, td {
 <p>Horse's id in the Feed Planner: {{ horse_info[0] }}</p>
 <p>Name: {{ horse_info[1] }}</p>
 <p>Year of birth: {{ horse_info[2] }}</p>
+        </div>
 
+<div class="section">
 <h3>Horse's energy consumption</h3>
 <p>Weight class: {{ horse_info[3] }} kg</p>
 <p>Excercise level: {{ horse_info[4] }}</p>
@@ -79,14 +23,14 @@ th, td {
 <form action="/updatehorse/{{ horse_info[0] }}" method="POST">
     <p>
         Weight class:
-        <p>
+        <br>
         <input type="radio" name="weight_class" value="450" {% if horse_info[3] == 450 %}checked{% endif %}> 450 kg
         <input type="radio" name="weight_class" value="550" {% if horse_info[3] == 550 %}checked{% endif %}> 550 kg
         <input type="radio" name="weight_class" value="600" {% if horse_info[3] == 600 %}checked{% endif %}> 600 kg
         
         <p>
         Level of exercise:
-        <p>
+        <br>
         <input type="radio" name="exercise_level" value="Rest" {% if horse_info[4] == 'Rest' %}checked{% endif %}> Rest
         <input type="radio" name="exercise_level" value="Light work" {% if horse_info[4] == 'Light work' %}checked{% endif %}> Light work
         <input type="radio" name="exercise_level" value="Moderate work" {% if horse_info[4] == 'Moderate work' %}checked{% endif %}> Moderate work
@@ -94,9 +38,11 @@ th, td {
              
     <p>
 
-        <input type="submit" value="Save">
+        <input type="submit" value="Save" class="button-link">
 </form>
-
+</div>
+        
+<div class="section">
 
 <h3>Horse's diet</h3>
 
@@ -105,20 +51,22 @@ th, td {
 <ul>
     {% for feed in menu %}
     <li><p>Feed id {{ feed[0] }}. {{ feed[1] }}: {{ feed[2] }} kg
-
+<br>
     <form action="/updatediet/{{ horse_info[0] }}" method="POST" style="display: inline;">
         <input type="hidden" name="feed_id" value="{{ feed[0] }}">
         <input type="text" name="amount" placeholder="Amount (kg)" pattern="^\d*([\.,]?\d+)?$">
-        <input type="submit" value="Save changes">
+        <input type="submit" value="Save changes" class="button-link">
     </form>
 
     <form action="/removefeed/{{ horse_info[0] }}" method="POST" style="display: inline;">
         <input type="hidden" name="feed_id" value="{{ feed[0] }}">
-        <input type="submit" value="Remove from diet">
+        <input type="submit" value="Remove from diet" class="button-link">
     </form>
     </li>
     {% endfor %}
 </ul>
+
+
 
 {% else %}
 <p>No diet has been created for this horse yet.</p>
@@ -126,24 +74,41 @@ th, td {
 
 
 <form action="/add_feed_to_diet/{{ horse_info[0] }}" method="POST">
-    <p>Add new feed to the horse's diet: </p>
-
-
-
+    <p>Add new feed to the horse's diet: 
+        <br>
     <select name="feed_id">
     {% for feed in feed_list %}
         <option value="{{ feed[0] }}">{{ feed[1] }}</option>
     {% endfor %}
     </select>
     <input type="text" name="amount" placeholder="Amount (kg)">
-    <input type="submit" value="Save">
+    <input type="submit" value="Save" class="button-link">
 
 </form>
 
+{% if not nutrition%}
+<p>
+    <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
+</p>
+{% endif %}
+
+</div>
 
 {% if nutrition%}
+
+        
+<div class="section">
 <h3>Nutrients</h3>
-<table>
+
+{% if ca_p%}
+<p>Calcium/Phosphorous -relation = {{ ca_p }}</p>
+{% endif %}
+
+</div>
+
+
+<div class="table">
+<table class="border-none">
     <tbody>
         {% for row in nutrition %}
             <tr>
@@ -154,19 +119,10 @@ th, td {
         {% endfor %}
     </tbody>
 </table>
-
+</div>
 
 {% endif %}
 
 
-
-
-<p>
-    <a href="{{ url_for('index') }}">Back to Home</a>
-</p>
-
-<a href="/logout">Log out</a>
-
-
-</body>
-</html>
+{% endblock %}
+{% endif %}

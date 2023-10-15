@@ -1,43 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-
-body {
-    background-color: #f0f0f0; 
-    font-family: Arial, sans-serif;
-}
-h1{
-    text-align: center;
-    color: #556b2f;
-}
-
-h2{
-    text-align: center;
-    color: #807156;
-}
+{% extends "layout.html" %}
 
 
-h3 {
-    text-align: left;
-    color: #556b2f;
-}
+{% if session.user_id %}
+    {% block content %}
+        <p>You are logged in as {{ session.username }}</p>
 
-a {
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-}
-a:hover {
-    text-decoration: underline;
-}
-
-</style>
-</head>
-<body>
-
-<h1>Horse Feed Planner</h1>
-<p>You are logged in as {{ session.username }}  {{ session.user_id }}</p>
+        <div class="section">
 
 <h2>{{ feed_name }}</h2>
 
@@ -46,7 +14,7 @@ a:hover {
 {% if nutrition_info %}
 <ul>
     {% for nutrition in nutrition_info %}
-    <li>{{ nutrition[0] }} {{ nutrition[1] }}: {{ nutrition[2] }} {{ nutrition[3] }}</li>
+    <li>{{ nutrition[0] }} ({{ nutrition[1] }}): {{ nutrition[2] }} {{ nutrition[3] }}</li>
     {% endfor %}
 </ul>
 
@@ -57,20 +25,16 @@ a:hover {
 
 {% if feed_owner  == session.user_id %}
 <p>
-    <a href="{{ url_for('editfeed', feed_id=feed_id) }}">Edit feed</a>
+    <a href="{{ url_for('editfeed', feed_id=feed_id) }}" class="button-link">Edit feed</a>
     <br>
-    <a href="{{ url_for('deletefeed', feed_id=feed_id) }}">Delete feed from database</a>
+    <a href="{{ url_for('deletefeed', feed_id=feed_id) }}" class="button-link">Delete feed from database</a>
 </p>
 {% else %}
 <p>This is a defaut feed that can not be edited.</p>
 {% endif %}
-
 <p>
-    <a href="{{ url_for('index') }}">Back to Home</a>
+    <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
 </p>
 
-<a href="/logout">Log out</a>
-
-
-</body>
-</html>
+{% endblock %}
+{% endif %}

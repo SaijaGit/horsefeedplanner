@@ -1,0 +1,281 @@
+/* Resetoidaan sivun ulkoasu ja poistetaan marginaalit ja paddingit */
+body, h1, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    background-color: #ececeb; /* ececeb, #D1D8BD;*/
+    font-family: Cambria, serif;
+    color: #333; 
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+h1 {
+    color: #1f3528ff;
+    font-size: 1.8em; 
+}
+h2 {
+    color: #b0b6bc;
+    font-size: 1.6em; 
+}
+h3 {
+    color: #b0b6bc;
+    font-size: 1.4em; 
+}
+
+
+
+
+
+
+
+.header {
+    background-color: #1f3528ff;
+    color: #C2D4B2;
+    padding: 1%;
+    display: inline-block; 
+    width: 100%;
+}
+
+.header-content {
+    align-items: center;
+    width: 70%;
+    float: left;
+}
+
+.header-logo {
+    width: 30%;
+    float: right;
+}
+.header-logo img {
+    align-items: center;
+    width: 60%;
+    padding: 1%;
+    max-height:200px;
+    min-height: 120px;
+}
+
+.header-h1 {
+    margin: 5% 1% 8% 3%;
+    font-size: 1.5em;
+}
+.header-h1 h1 {
+    color: #D1D8BD;
+}
+
+
+
+
+
+.header-nav {
+    position: relative;
+    width: 100%;
+}
+
+nav {
+    position: absolute;
+    left: 3.5%;
+    top: -2.5em;
+    display: flex;
+}
+
+nav a {
+    font-size: 1.2em;
+    text-decoration: none;
+    color: #F4ECE7;
+    margin-right: 20px;
+}
+
+
+
+main {
+    padding: 20px;
+    flex: 1;
+}
+main ul{
+    padding: 0 0 20px 20px;
+}
+main li{
+    padding: 8px 10px 0px 10px;
+}
+
+
+.section {
+    width: 60%;
+    margin: 0 auto;
+    background-color: #fff;/* #DFE0DC; */
+    border: 4px solid #D1D8BD; 
+    padding: 40px; 
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+}
+.section p {
+    /*font-family: Helvetica, Arial, sans-serif;*/
+    margin-bottom: 1em;
+}
+
+
+.welcome {
+    width: 60%;
+    background-color: #1f3528ff;/* #DFE0DC; */
+    color: #C2D4B2;
+    border: 4px solid #D1D8BD;
+    margin: 8% auto 1em auto;
+    padding: 40px; 
+    border-radius: 25px;
+    text-align: center;
+}
+.welcome h1 {
+    color: #D1D8BD;
+    font-size: 1.8em; 
+}
+.welcome img {
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    padding: 20px;
+    max-height: none;
+    min-height: 2em;
+}
+
+form label {
+    display: inline-block;
+    width: 150px; 
+}
+form .text-input {
+    height: 20px;
+    margin: 3px;
+}
+
+
+button, .button-link {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    background-color: #1f3528ff;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 5px;
+}
+
+button, .button-link:hover {
+    background-color: #D1D8BD;
+}
+
+
+.text-link {
+    text-decoration: none;
+    font-size: 1.3em; 
+    color: #544; 
+}
+
+.text-link:hover {
+    text-decoration: none; 
+    color: #C2D4B2; 
+}
+
+
+.welcome .button-link {
+    background-color: #D1D8BD; 
+}
+
+.welcome .button-link:hover {
+    background-color: #bba782; 
+}
+.welcome .text-link {
+    color: #e0e1dc; 
+}
+
+.welcome .text-link:hover {
+    color: #bba782; 
+}
+
+
+.table{
+    margin: 0 auto;
+    background-color: #fff;/* #DFE0DC; */
+    border: 4px solid #D1D8BD;
+    padding: 10px; 
+    margin-top: 10px;
+    margin-bottom: 20px;
+    border-radius: 25px;
+}
+table {
+    width: 98%;
+    background-color: white;
+    border-collapse: collapse;
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 0 auto;
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+    font-size: 0.8em;
+}
+
+.border-none {
+    border-collapse: collapse;
+    border: none;
+  }
+  
+  .border-none td {
+    border: 1px solid #D1D8BD;
+  }
+  
+  .border-none tr:first-child td {
+    border-top: none;
+  }
+  
+  .border-none tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .border-none tr td:first-child {
+    border-left: none;
+  }
+  
+  .border-none tr td:last-child {
+    border-right: none;
+  }
+
+
+footer {
+    /* position: relative; absolute; left: 0; bottom: 0;*/
+    width: 100%;
+}
+
+.footer-image {
+    width: 100%;
+}
+
+.footer-image img {
+    width: 100%;
+    max-height: none;
+}
+
+.footer-links {
+    /* position: absolute;*/
+    left: 8%;
+    width: 100%;
+    bottom: 20px;
+}
+
+
+
+
+.footer-links a {
+    /* text-decoration: none;*/
+    text-decoration-style: bold;
+    color: #1f3528ff;
+    margin: 0 20px; 
+}
+

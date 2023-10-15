@@ -1,42 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
-
-body {
-    background-color: #f0f0f0; 
-    font-family: Arial, sans-serif;
-}
-h1{
-    text-align: center;
-    color: #556b2f;
-}
-
-h2{
-    text-align: center;
-    color: #807156;
-}
+{% extends "layout.html" %}
 
 
-h3 {
-    text-align: left;
-    color: #556b2f;
-}
+{% if session.user_id %}
+    {% block content %}
 
-a {
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-}
-a:hover {
-    text-decoration: underline;
-}
+    <p>You are logged in as {{ session.username }}</p>
 
-</style>
-</head>
-<body>
-
-    <h1>Horse Feed Planner</h1>
+    <div class="section">
 
     <h2>Add a new feed!</h2>
 
@@ -48,93 +18,122 @@ a:hover {
     
     <h3>Contents</h3>
 
+
 <form action="/newfeed" method="POST">
-    <p>Name of the feed: 
-    <input type="text" name="name" required>
+    <label for="name">Name of the feed: </label> 
+    <input type="text" name="name" required class="text-input">
+    <br>
 
-    <p>Moisture
-    <input type="text" name="moisture" pattern="^\d*([\.,]?\d+)?$"> %
-    
-    <p>Metabolizable energy
-    <input type="text" name="energy" pattern="^\d*([\.,]?\d+)?$"> MJ/kg DM
+    <label for="moisture">Moisture</label>
+    <input type="text" name="moisture" pattern="^\d*([\.,]?\d+)?$" class="text-input"> %
+    <br>
 
-    <p>Protein
-    <input type="text" name="protein" pattern="^\d*([\.,]?\d+)?$"> %
+    <label for="energy">Metabolizable energy</label>
+    <input type="text" name="energy" pattern="^\d*([\.,]?\d+)?$" class="text-input"> MJ/kg DM
+    <br>
     
-    <p>Fat
-    <input type="text" name="fat" pattern="^\d*([\.,]?\d+)?$"> %
-    
-    <p>Fiber
-    <input type="text" name="fiber" pattern="^\d*([\.,]?\d+)?$"> %
-    
-    <p>Starch
-    <input type="text" name="starch" pattern="^\d*([\.,]?\d+)?$"> %
-    
-    <p>Sugar
-    <input type="text" name="sugar" pattern="^\d*([\.,]?\d+)?$"> %
-    
-    <p>Calcium
-    <input type="text" name="calcium" pattern="^\d*([\.,]?\d+)?$"> g/kg
-    
-    <p>Phosphorus
-    <input type="text" name="phosphorus" pattern="^\d*([\.,]?\d+)?$"> g/kg
-    
-    <p>Magnesium
-    <input type="text" name="magnesium" pattern="^\d*([\.,]?\d+)?$"> g/kg
-    
-    <p>Sodium
-    <input type="text" name="sodium" pattern="^\d*([\.,]?\d+)?$"> g/kg
-    
-    <p>Iron
-    <input type="text" name="iron" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Copper
-    <input type="text" name="copper" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Manganese
-    <input type="text" name="manganese" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Zinc
-    <input type="text" name="zinc" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Iodine
-    <input type="text" name="iodine" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Selenium
-    <input type="text" name="selenium" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Cobalt
-    <input type="text" name="cobalt" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Vitamin A
-    <input type="text" name="vitamin_a" pattern="^\d*([\.,]?\d+)?$"> IU/kg
-    
-    <p>Vitamin D3
-    <input type="text" name="vitamin_d3" pattern="^\d*([\.,]?\d+)?$"> IU/kg
-    
-    <p>Vitamin E
-    <input type="text" name="vitamin_e" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Vitamin B1
-    <input type="text" name="vitamin_b1" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Vitamin B2
-    <input type="text" name="vitamin_b2" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Vitamin B6
-    <input type="text" name="vitamin_b6" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Vitamin B12
-    <input type="text" name="vitamin_b12" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Biotin
-    <input type="text" name="biotin" pattern="^\d*([\.,]?\d+)?$"> mg/kg
-    
-    <p>Niacin
-    <input type="text" name="niacin" pattern="^\d*([\.,]?\d+)?$"> mg/kg
+    <label for="protein">Protein</label>
+    <input type="text" name="protein" pattern="^\d*([\.,]?\d+)?$" class="text-input"> %
+    <br>
+
+    <label for="fat">Fat</label>
+    <input type="text" name="fat" pattern="^\d*([\.,]?\d+)?$" class="text-input"> %
+    <br>
+
+    <label for="fiber">Fiber</label>
+    <input type="text" name="fiber" pattern="^\d*([\.,]?\d+)?$" class="text-input"> %
+    <br>
+
+    <label for="starch">Starch</label>
+    <input type="text" name="starch" pattern="^\d*([\.,]?\d+)?$" class="text-input"> %
+    <br>
+
+    <label for="sugar">Sugar</label>
+    <input type="text" name="sugar" pattern="^\d*([\.,]?\d+)?$" class="text-input"> %
+    <br>
+
+    <label for="calcium">Calcium</label>
+    <input type="text" name="calcium" pattern="^\d*([\.,]?\d+)?$" class="text-input"> g/kg
+    <br>
+
+    <label for="phosphorus">Phosphorus</label>
+    <input type="text" name="phosphorus" pattern="^\d*([\.,]?\d+)?$" class="text-input"> g/kg
+    <br>
+
+    <label for="magnesium">Magnesium</label>
+    <input type="text" name="magnesium" pattern="^\d*([\.,]?\d+)?$" class="text-input"> g/kg
+    <br>
+
+    <label for="sodium">Sodium</label>
+    <input type="text" name="sodium" pattern="^\d*([\.,]?\d+)?$" class="text-input"> g/kg
+    <br>
+
+    <label for="iron">Iron</label>
+    <input type="text" name="iron" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="copper">Copper</label>
+    <input type="text" name="copper" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="manganese">Manganese</label>
+    <input type="text" name="manganese" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="zinc">Zinc</label>
+    <input type="text" name="zinc" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="iodine">Iodine</label>
+    <input type="text" name="iodine" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="selenium">Selenium</label>
+    <input type="text" name="selenium" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="cobalt">Cobalt</label>
+    <input type="text" name="cobalt" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="vitamin_a">Vitamin A</label>
+    <input type="text" name="vitamin_a" pattern="^\d*([\.,]?\d+)?$" class="text-input"> IU/kg
+    <br>
+
+    <label for="vitamin_d3">Vitamin D3</label>
+    <input type="text" name="vitamin_d3" pattern="^\d*([\.,]?\d+)?$" class="text-input"> IU/kg
+    <br>
+
+    <label for="vitamin_e">Vitamin E</label>
+    <input type="text" name="vitamin_e" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="vitamin_b1">Vitamin B1</label>
+    <input type="text" name="vitamin_b1" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="vitamin_b2">Vitamin B2</label>
+    <input type="text" name="vitamin_b2" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="vitamin_b6">Vitamin B6</label>
+    <input type="text" name="vitamin_b6" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="vitamin_b12">Vitamin B12</label>
+    <input type="text" name="vitamin_b12" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="biotin">Biotin</label>
+    <input type="text" name="biotin" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
+
+    <label for="niacin">Niacin</label>
+    <input type="text" name="niacin" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
+    <br>
 
     <p>
-    <input type="submit" value="Save">
+    <input type="submit" value="Save" class="button-link">
 </form>
 
 {% with messages = get_flashed_messages() %}
@@ -148,8 +147,9 @@ a:hover {
 {% endwith %}
 
 <p>
-    <a href="{{ url_for('index') }}">Back to Home</a>
+    <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
 </p>
 
-</body>
-</html>
+</div>
+{% endblock %}
+{% endif %}

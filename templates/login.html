@@ -1,52 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-<style>
+{% extends "layout.html" %}
 
-body {
-    background-color: #f0f0f0; 
-    font-family: Arial, sans-serif;
-}
-h1{
-    text-align: center;
-    color: #556b2f;
-}
+{% block welcome %}
 
-h2{
-    text-align: center;
-    color: #807156;
-}
+<div class="section">
 
 
-h3 {
-    text-align: left;
-    color: #556b2f;
-}
-
-a {
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-}
-a:hover {
-    text-decoration: underline;
-}
-
-</style>
-</head>
-<body>
-
-<h1>Horse Feed Planner</h1>
-
+    <h1>Horse Feed Planner</h1>
 <h3>Log in</h3>
 
 <form action="/login" method="post">
-User name: <input type="text" name="username">
-<p>
-Password: <input type="password" name="password">
-<p>
-<input type="submit" value="Login">
+  <label for="username">User name:</label>
+  <input type="text" name="username" id="username" class="text-input">
+  <br>
+
+  <label for="password">Password:</label>
+  <input type="password" name="password" id="password" class="text-input">
+  <br>
+
+  <input type="submit" value="Log in" class="button-link">
 </form>
+
 
 
 {% with messages = get_flashed_messages() %}
@@ -59,11 +32,12 @@ Password: <input type="password" name="password">
  {% endif %}
 {% endwith %}
 
-
 <p>
-    <a href="{{ url_for('index') }}">Back to Home</a>
+  <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
 </p>
 
 
-</body>
-</html>
+
+</div>
+
+{% endblock %}

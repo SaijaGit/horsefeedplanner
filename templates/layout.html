@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/styles.css">
+</head>
+<body>
+
+
+{% if session.user_id %}
+<header class="header">
+    <div class="header-content">
+        <div class="header-h1">
+            <h1>Horse Feed Planner</h1>
+        </div>
+    </div>
+        <div class="header-logo">
+            <img src="/static/tsoha_logo.svg" alt="Logo">
+        </div>
+</header>
+{% endif %}
+
+
+{% if session.user_id %}
+<div class="header-nav">
+    <nav>
+        <a href="/">Home</a>
+        <a href="/logout">Log Out</a>
+    </nav>
+</div>
+{% endif %}
+
+
+<div class="container">
+<main>
+
+    
+    {% if session.user_id %}
+    
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    {% else %}
+
+
+        {% block welcome %}{% endblock %}
+
+
+    {% endif %}
+
+
+
+</main>
+
+
+<footer>
+    <div class="footer-image">
+        <img src="/static/tsoha_footer.svg" alt="Logo">
+    </div>
+    {% if session.user_id %}
+    <div class="footer-links">
+        <nav>
+            <a href="#">Home</a>
+            <a href="/logout">Log Out</a>
+        </nav>
+    </div>
+    {% endif %}
+</footer>
+</div>
+
+</body>
+</html>

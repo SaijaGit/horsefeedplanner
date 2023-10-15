@@ -92,11 +92,11 @@ def get_nutrition_of_diet(horse_id):
 def get_nutrient_amounts(horse_id):
     sql = text("""SELECT f.name AS feed_name,
                 (d.amount - (d.amount * f.moisture / 100)) * f.energy AS total_energy,
-                (d.amount - (d.amount * f.moisture / 100)) * f.protein AS total_protein,
-                (d.amount - (d.amount * f.moisture / 100)) * f.fat AS total_fat,
-                (d.amount - (d.amount * f.moisture / 100)) * f.fiber AS total_fiber,
-                (d.amount - (d.amount * f.moisture / 100)) * f.starch AS total_starch,
-                (d.amount - (d.amount * f.moisture / 100)) * f.sugar AS total_sugar,
+                (d.amount - (d.amount * f.moisture / 100)) * 10 * f.protein AS total_protein,
+                (d.amount - (d.amount * f.moisture / 100)) * 10 *  f.fat AS total_fat,
+                (d.amount - (d.amount * f.moisture / 100)) * 10 *  f.fiber AS total_fiber,
+                (d.amount - (d.amount * f.moisture / 100)) * 10 *  f.starch AS total_starch,
+                (d.amount - (d.amount * f.moisture / 100)) * 10 *  f.sugar AS total_sugar,
                 (d.amount - (d.amount * f.moisture / 100)) * f.calcium AS total_calcium,
                 (d.amount - (d.amount * f.moisture / 100)) * f.phosphorus AS total_phosphorus,
                 (d.amount - (d.amount * f.moisture / 100)) * f.magnesium AS total_magnesium,
@@ -142,11 +142,11 @@ def get_nutrient_amounts(horse_id):
 def get_nutrient_totals(horse_id):
     sql = text("""SELECT
                 SUM((d.amount - (d.amount * f.moisture / 100)) * f.energy) AS total_energy,
-                SUM((d.amount - (d.amount * f.moisture / 100)) * f.protein) AS total_protein,
-                SUM((d.amount - (d.amount * f.moisture / 100)) * f.fat) AS total_fat,
-                SUM((d.amount - (d.amount * f.moisture / 100)) * f.fiber) AS total_fiber,
-                SUM((d.amount - (d.amount * f.moisture / 100)) * f.starch) AS total_starch,
-                SUM((d.amount - (d.amount * f.moisture / 100)) * f.sugar) AS total_sugar,
+                SUM((d.amount - (d.amount * f.moisture / 100)) * 10 *  f.protein) AS total_protein,
+                SUM((d.amount - (d.amount * f.moisture / 100)) * 10 *  f.fat) AS total_fat,
+                SUM((d.amount - (d.amount * f.moisture / 100)) * 10 *  f.fiber) AS total_fiber,
+                SUM((d.amount - (d.amount * f.moisture / 100)) * 10 *  f.starch) AS total_starch,
+                SUM((d.amount - (d.amount * f.moisture / 100)) * 10 *  f.sugar) AS total_sugar,
                 SUM((d.amount - (d.amount * f.moisture / 100)) * f.calcium) AS total_calcium,
                 SUM((d.amount - (d.amount * f.moisture / 100)) * f.phosphorus) AS total_phosphorus,
                 SUM((d.amount - (d.amount * f.moisture / 100)) * f.magnesium) AS total_magnesium,
@@ -201,7 +201,14 @@ def get_nutrition_table(horse_id):
         return None
     units= ["Feeds"]
     for unit in result_data[1:]:
-        units.append(unit[0])
+        if unit[0] == "MJ/kg DM":
+            units.append("MJ")
+        elif unit[0] == "mg/kg":
+            units.append("mg")
+        elif unit[0] == "IU/kg":
+            units.append("IU")
+        else :
+            units.append("g")
     print("!!!! diets get_nutrition_table: units = ",  units)
 
     if not symbols or not units:
@@ -250,3 +257,28 @@ def format_value(value):
         return "{:.4f}".format(number)
     elif number < 0.001:
         return "{:.5f}".format(number)
+
+
+
+def get_Ca_P(horse_id):
+    sql = text("""SELECT
+                SUM((d.amount - (d.amount * f.moisture / 100)) * f.calcium) AS total_calcium,
+                SUM((d.amount - (d.amount * f.moisture / 100)) * f.phosphorus) AS total_phosphorus
+                FROM diets d JOIN feeds f ON d.feed_id = f.id WHERE d.horse_id = :horse_id;""")
+    result = db.session.execute(sql, {"horse_id":horse_id})
+    result_data= result.fetchall()
+    if not (result_data[0][0] and result_data[0][1]):
+        return None
+    
+    print("diets calculate_Ca_P: calsium = ", result_data[0][0], ", phosphorus = ", result_data[0][1])
+
+    calsium = float(result_data[0][0])
+    phosphorus = float(result_data[0][1])
+    ca_p = format_value(calsium / phosphorus)
+
+    print("diets calculate_Ca_P: calsium = ", calsium, ", phosphorus = ", phosphorus, "Ca/P = ", ca_p)
+    return ca_p
+
+
+def calculate_sugar(horse_id):
+    return horse_id
