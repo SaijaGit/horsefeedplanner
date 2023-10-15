@@ -32,6 +32,22 @@ def update(horse_id, weight_class, exercise_level):
     return True
 
 
+def delete(horse_id):
+    sql = text("DELETE FROM horses WHERE id = :horse_id;")
+    print("horses delete: sql =", sql, {"horse_id": horse_id})
+
+    try:
+        db.session.execute(sql, {"horse_id": horse_id})
+        db.session.commit()
+
+    except:
+        print("horses delete: except") 
+        return False
+
+    print("horses delete: OK") 
+    return True
+
+
 def get_info(horse_id):
     sql = text("SELECT * FROM horses WHERE id=:horse_id")
     result = db.session.execute(sql, {"horse_id":horse_id})

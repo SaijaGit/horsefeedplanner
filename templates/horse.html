@@ -13,7 +13,9 @@
 <p>Horse's id in the Feed Planner: {{ horse_info[0] }}</p>
 <p>Name: {{ horse_info[1] }}</p>
 <p>Year of birth: {{ horse_info[2] }}</p>
-        </div>
+<br>
+    <a href="/deletehorse/{{ horse_info[0] }}" class="button-link"  method="post">Delete horse from database</a>
+</div>
 
 <div class="section">
 <h3>Horse's energy consumption</h3>

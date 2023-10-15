@@ -118,6 +118,22 @@ def updatehorse(horse_id):
     return redirect("/horse/" + horse_id)
 
 
+
+
+@app.route("/deletehorse/<horse_id>", methods=["GET", 'POST'] )
+def deletehorse(horse_id):
+
+    deleted = horses.delete(horse_id)
+
+    if deleted:
+        print("routes deletehorse: horse deleted")
+    else:
+        flash("Failed to delete horse from the database", "error")
+    
+    return redirect("/")
+
+
+
 @app.route("/feed/<feed_id>")
 def feed(feed_id):
     user_id = users.user_id()
