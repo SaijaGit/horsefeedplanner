@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% if session.user_id %}
-    {% block content %}
+{% block content %}
 
 <div class="section">
 
@@ -9,50 +9,47 @@
 
     <h3>Fill in the information about your horse</h3>
 
-<form action="/newhorse" method="POST">
-    <label for="horse_name">Horse's name:</label>
-    <input type="text" name="horse_name" id="horse_name" class="text-input">
-    <br>
-    <label for="horse_name">Year of birth</label>
-    <input type="text" name="birth_year" id="birth_year" class="text-input">
-    <br><br>
+    <form action="/newhorse" method="POST">
+        <label for="horse_name">Horse's name:</label>
+        <input type="text" name="horse_name" id="horse_name" class="text-input">
+        <br>
+        <label for="horse_name">Year of birth</label>
+        <input type="text" name="birth_year" id="birth_year" class="text-input">
+        <br><br>
 
-    <label for="weight_class">Weight class:</label>
-    <br>
-    <input type="radio" name="weight_class" value="450" checked  class="text-input"> 450 kg
-    <input type="radio" name="weight_class" value="550"> 550 kg
-    <input type="radio" name="weight_class" value="600"> 600 kg
-    <br><br>
+        <label for="weight_class">Weight class:</label>
+        <br>
+        <input type="radio" name="weight_class" value="450" checked class="text-input"> 450 kg
+        <input type="radio" name="weight_class" value="550"> 550 kg
+        <input type="radio" name="weight_class" value="600"> 600 kg
+        <br><br>
 
-    <label for="exercise_level">Level of excercise:</label>
-    <br>
-    <input type="radio" name="exercise_level" value="Rest" checked  class="text-input"> Rest
-    <input type="radio" name="exercise_level" value="Light work"> Light work
-    <input type="radio" name="exercise_level" value="Moderate work"> Moderate work
-    <input type="radio" name="exercise_level" value="Heavy work"> Heavy work       
-    <br><br>
+        <label for="exercise_level">Level of excercise:</label>
+        <br>
+        <input type="radio" name="exercise_level" value="Rest" checked class="text-input"> Rest
+        <input type="radio" name="exercise_level" value="Light work"> Light work
+        <input type="radio" name="exercise_level" value="Moderate work"> Moderate work
+        <input type="radio" name="exercise_level" value="Heavy work"> Heavy work
+        <br><br>
 
         <input type="submit" value="Save" class="button-link">
-</form>
+    </form>
 
-{% with messages = get_flashed_messages() %}
- {% if messages %}
-  <ul>
-  {% for message in messages %}
-    <li>{{ message }}</li>
-  {% endfor %}
-  </ul>
- {% endif %}
-{% endwith %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 
+    <p>
+        <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
+    </p>
 
-<p>
-    <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
-</p>
-  
-  
-  
-  </div>
-  
-  {% endblock %}
-  {% endif %}
+</div>
+
+{% endblock %}
+{% endif %}

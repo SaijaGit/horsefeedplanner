@@ -4,39 +4,35 @@
 
 <div class="section">
 
+  <h1>Horse Feed Planner</h1>
+  <h3>Log in</h3>
 
-    <h1>Horse Feed Planner</h1>
-<h3>Log in</h3>
+  <form action="/login" method="post">
+    <label for="username">User name:</label>
+    <input type="text" name="username" id="username" class="text-input">
+    <br>
 
-<form action="/login" method="post">
-  <label for="username">User name:</label>
-  <input type="text" name="username" id="username" class="text-input">
-  <br>
+    <label for="password">Password:</label>
+    <input type="password" name="password" id="password" class="text-input">
+    <br>
 
-  <label for="password">Password:</label>
-  <input type="password" name="password" id="password" class="text-input">
-  <br>
-
-  <input type="submit" value="Log in" class="button-link">
-</form>
-
+    <input type="submit" value="Log in" class="button-link">
+  </form>
 
 
-{% with messages = get_flashed_messages() %}
- {% if messages %}
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
   <ul>
-  {% for message in messages %}
+    {% for message in messages %}
     <li>{{ message }}</li>
-  {% endfor %}
+    {% endfor %}
   </ul>
- {% endif %}
-{% endwith %}
+  {% endif %}
+  {% endwith %}
 
-<p>
-  <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
-</p>
-
-
+  <p>
+    <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
+  </p>
 
 </div>
 

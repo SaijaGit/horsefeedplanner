@@ -1,7 +1,7 @@
 from db import db
 from flask import session
 from sqlalchemy.sql import text
-import users, feeds, horses
+import feeds, horses
 
 def add(horse_id, feed_id, add_amount):
     sql = text("SELECT amount FROM diets WHERE horse_id = :horse_id AND feed_id = :feed_id;")
@@ -34,6 +34,7 @@ def new(horse_id, feed_id, amount):
     print("diets add: OK") 
     return True
 
+
 def update(horse_id, feed_id, amount):
     sql = text("UPDATE diets SET amount = :amount WHERE horse_id = :horse_id AND feed_id = :feed_id;")
     print("diets update: sql =", sql, {"amount":amount, "horse_id":horse_id, "feed_id":feed_id })
@@ -47,7 +48,6 @@ def update(horse_id, feed_id, amount):
         return False
     print("diets update: OK") 
     return True
-
 
 
 def delete(horse_id, feed_id):
@@ -88,6 +88,7 @@ def get_nutrition_of_diet(horse_id):
         print("diets get_nutrition_of_diet: ",  nutrition_of_diet)
     
     return nutrition_of_diet
+
 
 def get_nutrient_amounts(horse_id):
     sql = text("""SELECT f.name AS feed_name,
@@ -134,10 +135,9 @@ def get_nutrient_amounts(horse_id):
                 row.append(format_value(raw_data[i][j]))
         nutrient_amounts.append(row)
 
-
-    
     print("diets get_nutrient_amounts: nutrient_amounts = ", nutrient_amounts)
     return nutrient_amounts
+
 
 def get_nutrient_totals(horse_id):
     sql = text("""SELECT
@@ -174,6 +174,10 @@ def get_nutrient_totals(horse_id):
         return None
 
     raw_data = list(result_data[0])
+    print("diets get_nutrient_totals: raw_data = ", raw_data)
+
+    if len(raw_data) == 0:
+        return None
 
     nutrient_totals = []
     for data in raw_data:
@@ -183,7 +187,9 @@ def get_nutrient_totals(horse_id):
 
 
 def get_nutrition_table(horse_id):
+    full_nutrition_table = []
     nutrition_table = []
+
     sql = text("SELECT symbol FROM nutritions")
     result = db.session.execute(sql, {"horse_id":horse_id})
     result_data = list(result.fetchall())
@@ -214,17 +220,17 @@ def get_nutrition_table(horse_id):
     if not symbols or not units:
         return None
     
-    nutrition_table.append(symbols)
-    nutrition_table.append(units)
+    full_nutrition_table.append(symbols)
+    full_nutrition_table.append(units)
 
     nutrition = get_nutrient_amounts(horse_id)
     print("!!!!!!!!!!!! diets get_nutrition_table: nutrition = ",  nutrition)
     if not nutrition:
+        print("!!!!!!!!!!!! diets get_nutrition_table: NOT nutrition !!! ")
         return None
     
     for feed in nutrition:
-        nutrition_table.append(feed)
-
+        full_nutrition_table.append(feed)
     
     totals = get_nutrient_totals(horse_id)
     print("!!!! diets get_nutrition_table: totals = ",  totals)
@@ -232,30 +238,107 @@ def get_nutrition_table(horse_id):
         return None
     total = ["Total gain of nutrients"] + totals
 
-    nutrition_table.append(total)
+    full_nutrition_table.append(total)
+
+    for row in full_nutrition_table :
+        nutrition_table.append(row[:3] + row[7:10] + row[11:])
+
+    recommendations = get_recommendations(horse_id)
+    if not recommendations:
+        print("!!!! diets get_nutrition_table: not recommendations")
+        return None
+    
+    print("!!!! diets get_nutrition_table: recommendations = ",  recommendations)
+
+    ranges = calculate_ranges(recommendations)
+    differences = calculate_differencies(nutrition_table, recommendations)
+
+    print("!!!! diets get_nutrition_table: differences = ",  differences)
+    nutrition_table.append(ranges)
+    nutrition_table.append(differences)
 
     print("diets get_nutrition_table: nutrition_table = ",  nutrition_table)
 
     return nutrition_table
 
+
+def calculate_differencies(nutrition_table, recommendations):
+    differences = ["Difference to the recommendation"]
+
+    for i in range(0, len(recommendations), 2):
+        recommendation = float(recommendations[i])
+        tolerance = float(recommendations[i + 1])
+        value = float(nutrition_table[-1][(i // 2)+1])
+
+        if value - (recommendation - tolerance) < 0:
+            difference = format_value(value - (recommendation - tolerance))
+        elif value - (recommendation + tolerance) > 0:
+            difference = format_value(value - (recommendation + tolerance))
+        else:
+            difference = 0
+        
+        differences.append(float(difference))
+
+    print("!!!! diets calculate_differencies: differences = ",  differences)
+    return differences
+
+
+def calculate_ranges(recommendations):
+    ranges = ["Recommended"]
+
+    for i in range(0, len(recommendations), 2):
+        recommendation = float(recommendations[i])
+        tolerance = float(recommendations[i + 1])
+
+        recommendation_range = "(" + format_value(recommendation - tolerance) + " - " + format_value(recommendation + tolerance) + ")"
+        
+        ranges.append(recommendation_range)
+
+    print("!!!! diets calculate_ranges: ranges = ",  ranges)
+    return ranges
+
+
+def get_recommendations(horse_id):
+    horse_info= horses.get_info(horse_id)
+    if not horse_info:
+        return None
+    weight_class = horse_info[3]
+    exercise_level = horse_info[4]
+
+    sql = text("SELECT * FROM recommendations WHERE weight_class = :weight_class AND exercise_level = :exercise_level;")
+    
+    print("diets get_recommendations: sql =", sql, {"weight_class":weight_class, "exercise_level":exercise_level} ) 
+    try:
+        result = db.session.execute(sql, {"weight_class":weight_class, "exercise_level":exercise_level})
+    except:
+        print("diets get_recommendations: except") 
+        return None
+    
+    recommendations = list(result.fetchall()[0])
+    print("diets get_recommendations: recommendations =", recommendations[3:]) 
+    if not recommendations:
+        return None
+    
+    return recommendations[3:]
+
+
 def format_value(value):
-    print("diets format_value: value *1 = ",  value)
+    print("diets format_value: original value = ",  value)
     number = float(value)
-    print("diets format_value: number *1 = ",  number)
     if number.is_integer():
-        print("diets format_value: number *2 = ",  str(int(number)))
         return str(int(number))
-    elif number > 1:
-        print("diets format_value: number *3 = ",  "{:.1f}".format(number))
+    elif abs(number) >= 100:
+        print("diets format_value: formated value = ",  "{:.0f}".format(number))
+        return "{:.0f}".format(number)
+    elif abs(number) > 1:
         return "{:.1f}".format(number)
-    elif 0.1 <= number < 1:
-        print("diets format_value: number *4 = ",  "{:.1f}".format(number))
+    elif 0.1 <= abs(number) < 1:
         return "{:.2f}".format(number)
-    elif 0.01 <= number < 0.1:
+    elif 0.01 <= abs(number) < 0.1:
         return "{:.3f}".format(number)
-    elif 0.001 <= number < 0.01:
+    elif 0.001 <= abs(number) < 0.01:
         return "{:.4f}".format(number)
-    elif number < 0.001:
+    elif abs(number) < 0.001:
         return "{:.5f}".format(number)
 
 
@@ -274,11 +357,30 @@ def get_Ca_P(horse_id):
 
     calsium = float(result_data[0][0])
     phosphorus = float(result_data[0][1])
-    ca_p = format_value(calsium / phosphorus)
 
-    print("diets calculate_Ca_P: calsium = ", calsium, ", phosphorus = ", phosphorus, "Ca/P = ", ca_p)
+    if phosphorus == 0:
+        relation = 0
+    else :
+        relation =  round(calsium / phosphorus, 1)
+    print("diets calculate_Ca_P: relation = ", relation)
+    if relation < 1.2:
+        difference = round(relation - 1.2, 1)
+        print("diets calculate_Ca_P: difference = ", difference)
+    elif relation > 1.8:
+        difference = round(relation - 1.8, 1)
+    else:
+        difference = 0
+
+    ca_p = [relation, difference]
+
+    print("diets calculate_Ca_P: calsium = ", calsium, ", phosphorus = ", phosphorus, "Ca/P = ", ca_p[0], ", difference = ", ca_p[1])
     return ca_p
 
 
-def calculate_sugar(horse_id):
-    return horse_id
+def get_horse_specific_nutrients(horse_id):
+    totals = get_nutrient_totals(horse_id)
+    if not totals:
+        return None
+    print("diets get_horse_specific_nutrients: totals[2:6] = ", totals[2:6])
+    return totals[2:6]
+

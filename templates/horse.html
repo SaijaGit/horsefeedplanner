@@ -1,130 +1,148 @@
 {% extends "layout.html" %}
 
-
 {% if session.user_id %}
-    {% block content %}
-        <p>You are logged in as {{ session.username }}</p>
+{% block content %}
+<p>You are logged in as {{ session.username }}</p>
 
-        <div class="section">
-
-<h2>{{ horse_info[1] }}</h2>
-
-<h3>Horse's basic information</h3>
-<p>Horse's id in the Feed Planner: {{ horse_info[0] }}</p>
-<p>Name: {{ horse_info[1] }}</p>
-<p>Year of birth: {{ horse_info[2] }}</p>
-<br>
-    <a href="/deletehorse/{{ horse_info[0] }}" class="button-link"  method="post">Delete horse from database</a>
+<div class="section">
+    <h2>{{ horse_info[1] }}</h2>
+    <h3>Horse's basic information</h3>
+    <p>Horse's id in the Feed Planner: {{ horse_info[0] }}</p>
+    <p>Name: {{ horse_info[1] }}</p>
+    <p>Year of birth: {{ horse_info[2] }}</p>
+    <br>
+    <a href="/deletehorse/{{ horse_info[0] }}" class="button-link" method="post">Delete horse from database</a>
 </div>
 
 <div class="section">
-<h3>Horse's energy consumption</h3>
-<p>Weight class: {{ horse_info[3] }} kg</p>
-<p>Excercise level: {{ horse_info[4] }}</p>
+    <h3>Horse's energy consumption</h3>
+    <p>Weight class: {{ horse_info[3] }} kg</p>
+    <p>Excercise level: {{ horse_info[4] }}</p>
 
-<form action="/updatehorse/{{ horse_info[0] }}" method="POST">
-    <p>
-        Weight class:
-        <br>
-        <input type="radio" name="weight_class" value="450" {% if horse_info[3] == 450 %}checked{% endif %}> 450 kg
-        <input type="radio" name="weight_class" value="550" {% if horse_info[3] == 550 %}checked{% endif %}> 550 kg
-        <input type="radio" name="weight_class" value="600" {% if horse_info[3] == 600 %}checked{% endif %}> 600 kg
-        
+    <form action="/updatehorse/{{ horse_info[0] }}" method="POST">
+        <p>Weight class:
+            <br>
+            <input type="radio" name="weight_class" value="450" {% if horse_info[3]==450 %}checked{% endif %}> 450 kg
+            <input type="radio" name="weight_class" value="550" {% if horse_info[3]==550 %}checked{% endif %}> 550 kg
+            <input type="radio" name="weight_class" value="600" {% if horse_info[3]==600 %}checked{% endif %}> 600 kg
+
+        <p>Level of exercise:
+            <br>
+            <input type="radio" name="exercise_level" value="Rest" {% if horse_info[4]=='Rest' %}checked{% endif %}>
+            Rest
+            <input type="radio" name="exercise_level" value="Light work" {% if horse_info[4]=='Light work' %}checked{%
+                endif %}> Light work
+            <input type="radio" name="exercise_level" value="Moderate work" {% if horse_info[4]=='Moderate work'
+                %}checked{% endif %}> Moderate work
+            <input type="radio" name="exercise_level" value="Heavy work" {% if horse_info[4]=='Heavy work' %}checked{%
+                endif %}> Heavy work
         <p>
-        Level of exercise:
-        <br>
-        <input type="radio" name="exercise_level" value="Rest" {% if horse_info[4] == 'Rest' %}checked{% endif %}> Rest
-        <input type="radio" name="exercise_level" value="Light work" {% if horse_info[4] == 'Light work' %}checked{% endif %}> Light work
-        <input type="radio" name="exercise_level" value="Moderate work" {% if horse_info[4] == 'Moderate work' %}checked{% endif %}> Moderate work
-        <input type="radio" name="exercise_level" value="Heavy work" {% if horse_info[4] == 'Heavy work' %}checked{% endif %}> Heavy work
-             
-    <p>
-
-        <input type="submit" value="Save" class="button-link">
-</form>
+            <input type="submit" value="Save" class="button-link">
+    </form>
 </div>
-        
+
 <div class="section">
 
-<h3>Horse's diet</h3>
+    <h3>Horse's diet</h3>
 
-{% if menu%}
+    {% if menu%}
 
-<ul>
-    {% for feed in menu %}
-    <li><p>Feed id {{ feed[0] }}. {{ feed[1] }}: {{ feed[2] }} kg
-<br>
-    <form action="/updatediet/{{ horse_info[0] }}" method="POST" style="display: inline;">
-        <input type="hidden" name="feed_id" value="{{ feed[0] }}">
-        <input type="text" name="amount" placeholder="Amount (kg)" pattern="^\d*([\.,]?\d+)?$">
-        <input type="submit" value="Save changes" class="button-link">
+    <ul>
+        {% for feed in menu %}
+        <li>
+            <p>Feed id {{ feed[0] }}. {{ feed[1] }}: {{ feed[2] }} kg
+                <br>
+            <form action="/updatediet/{{ horse_info[0] }}" method="POST" style="display: inline;">
+                <input type="hidden" name="feed_id" value="{{ feed[0] }}">
+                <input type="text" name="amount" placeholder="Amount (kg)" pattern="^\d*([\.,]?\d+)?$">
+                <input type="submit" value="Save changes" class="button-link">
+            </form>
+
+            <form action="/removefeed/{{ horse_info[0] }}" method="POST" style="display: inline;">
+                <input type="hidden" name="feed_id" value="{{ feed[0] }}">
+                <input type="submit" value="Remove from diet" class="button-link">
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% else %}
+    <p>No diet has been created for this horse yet.</p>
+    {% endif %}
+
+
+    <form action="/add_feed_to_diet/{{ horse_info[0] }}" method="POST">
+        <p>Add new feed to the horse's diet:
+            <br>
+            <select name="feed_id">
+                {% for feed in feed_list %}
+                <option value="{{ feed[0] }}">{{ feed[1] }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="amount" placeholder="Amount (kg)">
+            <input type="submit" value="Save" class="button-link">
     </form>
 
-    <form action="/removefeed/{{ horse_info[0] }}" method="POST" style="display: inline;">
-        <input type="hidden" name="feed_id" value="{{ feed[0] }}">
-        <input type="submit" value="Remove from diet" class="button-link">
-    </form>
-    </li>
-    {% endfor %}
-</ul>
-
-
-
-{% else %}
-<p>No diet has been created for this horse yet.</p>
-{% endif %}
-
-
-<form action="/add_feed_to_diet/{{ horse_info[0] }}" method="POST">
-    <p>Add new feed to the horse's diet: 
-        <br>
-    <select name="feed_id">
-    {% for feed in feed_list %}
-        <option value="{{ feed[0] }}">{{ feed[1] }}</option>
-    {% endfor %}
-    </select>
-    <input type="text" name="amount" placeholder="Amount (kg)">
-    <input type="submit" value="Save" class="button-link">
-
-</form>
-
-{% if not nutrition%}
-<p>
-    <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
-</p>
-{% endif %}
+    {% if not nutrition%}
+    <p>
+        <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
+    </p>
+    {% endif %}
 
 </div>
+
+
+
+{% if ca_p or varying_nutriens %}
+<div class="section">
+    <h3>Nutrients</h3>
+
+    {% if ca_p %}
+    <p>Calcium/Phosphorous -relation:
+        {% if ca_p[1] < 0 %} <span style="color: blue;">{{ ca_p[0] }}</span> ({{ ca_p[1] }} of the recommended 1.2 -1.8)
+            {% elif ca_p[1] > 0 %}
+            <span style="color: red;">{{ ca_p[0] }}</span> ( +{{ ca_p[1] }} of the recommended 1.2 - 1.8)
+            {% else %}
+            {{ ca_p[0] }} (recommended 1.2 - 1.8)
+            {% endif %}
+    </p>
+    {% endif %}
+    {% if varying_nutriens %}
+    <p>Fat: {{ varying_nutriens[0] }} g
+    <p>Fiber: {{ varying_nutriens[1] }} g
+    <p>Starch: {{ varying_nutriens[2] }} g
+    <p>Sugar: {{ varying_nutriens[3] }} g
+        {% endif %}
+
+</div>
+{% endif %}
 
 {% if nutrition%}
-
-        
-<div class="section">
-<h3>Nutrients</h3>
-
-{% if ca_p%}
-<p>Calcium/Phosphorous -relation = {{ ca_p }}</p>
-{% endif %}
-
-</div>
-
-
 <div class="table">
-<table class="border-none">
-    <tbody>
-        {% for row in nutrition %}
-            <tr>
+    <table class="border-none">
+        <tbody>
+            {% for row in nutrition %}
+            <tr {% if loop.last %}class="last-row" {% endif %}>
                 {% for cell in row %}
-                    <td>{{ cell }}</td>
+                <td>
+                    {% if cell is number %}
+                    {% if cell < 0 %} <span class="blue">{{ cell }}</span>
+                        {% elif cell > 0 %}
+                        <span class="red">+{{ cell }}</span>
+                        {% elif cell == 0 %}
+                        <span class="green">{{ cell }}</span>
+                        {% endif %}
+                        {% else %}
+                        {{ cell }}
+                        {% endif %}
+                </td>
                 {% endfor %}
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 
 {% endif %}
-
-
 {% endblock %}
 {% endif %}

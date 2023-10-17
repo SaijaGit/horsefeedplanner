@@ -1,40 +1,39 @@
 {% extends "layout.html" %}
 
-
 {% if session.user_id %}
-    {% block content %}
-        <p>You are logged in as {{ session.username }}</p>
+{% block content %}
+<p>You are logged in as {{ session.username }}</p>
 
-        <div class="section">
+<div class="section">
 
-<h2>{{ feed_name }}</h2>
+    <h2>{{ feed_name }}</h2>
 
-<h3>Contents</h3>
+    <h3>Contents</h3>
 
-{% if nutrition_info %}
-<ul>
-    {% for nutrition in nutrition_info %}
-    <li>{{ nutrition[0] }} ({{ nutrition[1] }}): {{ nutrition[2] }} {{ nutrition[3] }}</li>
-    {% endfor %}
-</ul>
+    {% if nutrition_info %}
+    <ul>
+        {% for nutrition in nutrition_info %}
+        <li>{{ nutrition[0] }} ({{ nutrition[1] }}): {{ nutrition[2] }} {{ nutrition[3] }}</li>
+        {% endfor %}
+    </ul>
 
-{% else %}
-<p>No nutritional information has yet been entered for this feed.</p>
-{% endif %}
+    {% else %}
+    <p>No nutritional information has yet been entered for this feed.</p>
+    {% endif %}
 
 
-{% if feed_owner  == session.user_id %}
-<p>
-    <a href="{{ url_for('editfeed', feed_id=feed_id) }}" class="button-link">Edit feed</a>
-    <br>
-    <a href="{{ url_for('deletefeed', feed_id=feed_id) }}" class="button-link">Delete feed from database</a>
-</p>
-{% else %}
-<p>This is a defaut feed that can not be edited.</p>
-{% endif %}
-<p>
-    <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
-</p>
+    {% if feed_owner == session.user_id %}
+    <p>
+        <a href="{{ url_for('editfeed', feed_id=feed_id) }}" class="button-link">Edit feed</a>
+        <br>
+        <a href="{{ url_for('deletefeed', feed_id=feed_id) }}" class="button-link">Delete feed from database</a>
+    </p>
+    {% else %}
+    <p>This is a defaut feed that can not be edited.</p>
+    {% endif %}
+    <p>
+        <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
+    </p>
 
-{% endblock %}
-{% endif %}
+    {% endblock %}
+    {% endif %}

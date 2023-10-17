@@ -61,6 +61,7 @@ def update(feed_id, nutrition):
     print("feeds update: OK") 
     return True
 
+
 def delete(feed_id):
     user_id= users.user_id()
     owner_id=get_name_and_owner(feed_id)[1]
@@ -74,6 +75,7 @@ def delete(feed_id):
     #    return None
     return True
     
+
 def get_name_and_owner(feed_id):
     sql = text("SELECT name, owner_id FROM feeds WHERE id=:feed_id")
     result = db.session.execute(sql, {"feed_id":feed_id})
@@ -82,6 +84,7 @@ def get_name_and_owner(feed_id):
         return None
     return feed
 
+
 def get_nutrition(reference):
     sql = text("SELECT * FROM nutritions WHERE reference=:reference")
     result = db.session.execute(sql, {"reference":reference})
@@ -89,6 +92,7 @@ def get_nutrition(reference):
     if not nutririon:
         return None
     return nutririon
+
 
 def get_ids_and_names(whose="own"):
     user_id= users.user_id()
@@ -108,7 +112,6 @@ def get_ids_and_names(whose="own"):
         return [(row[0], row[1]) for row in rows]
     
 
-
 def get_nutrients_for_feed(feed_id):
     sql_feed = text("""SELECT name, moisture, energy, protein, fat, fiber, starch, 
                     sugar, calcium, phosphorus, magnesium, sodium, iron, copper, manganese, 
@@ -125,22 +128,6 @@ def get_nutrients_for_feed(feed_id):
     else:
         return feed
 
-def get_basic_nutrition_info_NOT_WORKING(feed_id):
-    feed = get_nutrients_for_feed(feed_id)
-    print("feeds get_nutriton_info: feed = ", feed)
-    if not feed:
-        return None
-
-    print("feeds get_nutriton_info: feed = ", feed)
-
-    data = []
-
-    for nutrient in feed:
-        if nutrient != 0 :
-            data.append(nutrient)
-
-    print("feeds get_nutriton_info: data = ", data)
-    return data
 
 def get_nutrition_info(feed_id):
     sql_feed = text("SELECT * FROM feeds WHERE id=:feed_id")

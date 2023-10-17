@@ -85,7 +85,12 @@ def horse(horse_id):
     feed_list = feeds.get_ids_and_names("all")
     menu = diets.get_info(horse_id)
     nutrition = diets.get_nutrition_table(horse_id)
-    ca_p = diets.get_Ca_P(horse_id)
+    if nutrition: 
+        ca_p = diets.get_Ca_P(horse_id)
+        varying_nutriens = diets.get_horse_specific_nutrients(horse_id)
+    else:
+        ca_p = None
+        varying_nutriens = None
 
     print("routes horse: horse info =", horse_info ) 
     print("routes horse: menu =", menu )
@@ -95,7 +100,7 @@ def horse(horse_id):
     else:
         print("routes horse: user_id =", user_id, " vs. owner_id =", horse_info[5]) 
         if user_id == horse_info[5]:
-            return render_template("horse.html", horse_info=horse_info, feed_list=feed_list, menu=menu, nutrition=nutrition, ca_p=ca_p)
+            return render_template("horse.html", horse_info=horse_info, feed_list=feed_list, menu=menu, nutrition=nutrition, ca_p=ca_p, varying_nutriens=varying_nutriens)
         else:
             print("routes horse: not the owner")
             return redirect("/")

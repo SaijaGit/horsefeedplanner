@@ -56,7 +56,6 @@ def get_info(horse_id):
         return None
     #exercise_levels = ["Rest", "Light work", "Moderate work", "Heavy work"]
     horse_info = list(horse)
-    #horse_info.append(exercise_levels[horse[4]])
     print("horses get_info: horse_info = ", horse_info)
     return horse_info
 
