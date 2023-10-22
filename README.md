@@ -5,6 +5,19 @@ Course project for TKT20019 Databases and programming, autumn 2023
 This project implements a web application for planning horse feeding. The application uses 
 an SQL database to store and process data.
 
+## Background of the project
+Hay is the the most important part of a horse's diet as it provides essential fiber and nutrients, keeps the horse's digestive system healthy. In the wild, equine animals graze on grass almost continuously while also movin long distances and consuming a lot of energy.
+
+Therefore the horse feeding should be based on the quality and quantity of hay. However, the nutritional value of hay varies greatly, e.g. due to the weather, fertilizers and harvest time, and affects what other feeding is necessary. A common issue with domesticated horses is that if they ate so much hay that they would get all the nutrients they need, they would often gain too much weight. That's why hay feeding usually has to be supplemented with other feeds and supplements.
+
+The horse's individual characteristics, such as size, type and activity, affect the feeding it needs. Many horses also have health reasons, which is why, for example, the total amount of sugar in their feed is tried to be as low as possible, or the amount of fiber high.
+
+## Limitations of the project
+I had to draw a line on how precise I would make the Horse Feed Planner. For practical reasons, I had to leave out, for example, the special needs of young horses and pregnant mares, because the focus of the project seemed to shift too much to the side of Animal Science. Collecting nutritional recommendations was challenging, because foreign information is not completely valid in Finland due to, among other things, the shorter grazing season, less sunlight and different types of feeds and hay.
+
+For those nutrients for which I could not find reliable minimum and maximum limits, I calculated the tolerances simply +- 10% of the recommendation. I also had to interpolate the recommendations of some nutrients for horses of different sizes.
+
+I therefore tried to design the application in such a way that it can easily be expanded later.
 
 ## Application features
 The horse feed planner is an application that helps to optimize a diet of a horse.
@@ -14,97 +27,37 @@ The application calculates the nutrients each horse receives and compares them t
 With this, the horse's owner can notice if the horse is getting too much or too little of a nutrient, 
 and adjust the feeding accordingly.
 
+The application also contains default feeds added by administrators, which are available to all users.
+
 
 ## Information stored in the application's databases
+The application contains the following database tables:
 
-### Horse information
-The user can save a basic information for each horse, and what and how much it eats.
-Information that affects the planning of horse feeding is e.g. the horse's age, type and 
-condition, and how much it exercises.
+### users
+The table "users" contains the application's user ID numbers, usernames, passwords in encrypted form and user role (basic or admin rights).
 
-### Feed information
-The most important nutrients to consider when planning feeding are protein, minerals and vitamins. 
-The energy content must also be taken into account.
+### horses
+The table "horses" contains information of each horse, such as ID number, name, birth year, weight class, excercise level and owner. 
 
-The horse's most important feed is hay, which it must get enough of to keep its stomach healthy. 
-Because the nutritional value of hay varies greatly, e.g. due to the weather, fertilizers and harvest time, 
-the user can save in the application the information about the hay they use according to their current hay 
-analysis results.
+### feeds
+The table "feed" contains the nutritional contents of different feeds for different nutrients. Each feed also has a reference to its owner, except for default feeds visible to all users, where the value of the owner field is 0.
+The application has a few default feeds, which are added to the database before using the application, using the data.sql file after creating the database.
 
-By default, the application's database contains the nutritional contents of some commonly used feeds, but the user can 
-also add the feeds and supplements they use as needed.
+### nutritions
+The table "nutritions" contains basic information for each nutrient. These include the nutrient name, abbreviation, unit, and a reference to which nutrient they are related to. The table also has a field so that in later versions of the application, additional information about the nutrient in question could be included.
+This information is added to the database before using the application, using the data.sql file after creating the database.
 
-### Feeding recommendations
-The application contains the information of the horses' requirements tables for the most important nutrients. 
-The application uses the official recommendations of the Natural Resources Institute Finland (Luke), which can 
-be found at: https://maatalousinfo.luke.fi/fi/cms/rehu/hevoset/hevosten-ruokintasuositukset/
+### diets
+The table "diets" contains information about the horses' diets by connecting the horses and the feeds they eat. It has fields for the amount of feed, and references to the horse and feed. These references are configured so that if the horse or feed in question is deleted from the database, the feedings contained in them are also removed.
 
-### User information
-The app contains two kinds of users: normal users and adminstrators.
-Normal users can save and modify information of their horses and feeds.
-Administrators can remove user accounts and modify default feed information and feeding recommendations.
+### recommendations
+The table "recommendations" contains recommended values and tolerances for different nutrients, sorted for horses of different sizes and with different activities.
+
+Recommendations are also added to the database before using the application, using the data.sql file after creating the database.
 
 
-## The pages of the app
-### Login page
-- Fields to enter user name and password
-- Not yet decided where and how the account creation is handled
 
-### Main page
-- List of user's horses containing links to their pages
-- Link to "Add a new horse" page
-- List of user's feeds
-- Link to "Add a new feed" page
-- Link to "All feeds" page
-
-### Horse information page
-- Horse's information in text fields, where they can also be modified
-- A list of all the feeds the horse eats and how much nutrients it gets from each
-- Summary of the nutrients the horse receives and the differences from the recommendations
-- Buttons to ignore or save the changes
-
-### Add a new horse page
-- A form for entering the information on a new horse and its diet
-
-### Feed information page
-- The nutritional content of the feed
-- The user can edit the information of the feeds they have added, but not the default feeds offered by the application.
-
-### Add a new feed page
-- A form for entering the information and nutritional content on a feed
-
-### All feeds page
-- On this summary page, information on the nutritional content of all stored feeds has been collected in one table.
-
-### Administrator's page
-- List of all the users and buttons to remove their accouts
-- List of default feeds and forms to modify their contents
-- Form to modify the feeding recommendations
-
-## Status at 24.9.2023
-### Already implemented:
-- Regular users
-- Account creation, login, logout
-- Wiewing basic information on user's own horses
-- Wiewing information on user's own and default feeds
-- Possibility to add own horses into database
-- Possibiity to add own feeds into database
-
-## Status at 8.10.2023
-### New features:
-- Horses weight class and excercise level can be edited
-- User can edit their own feeds
-- Diets can be created and edited for horses
-- Nutritional calculation of the horse's diet is shown
-
-### Remarks:
-- The presentation and processing of feed information is still at an early stage. Entering feed information is difficult,
-  as the program requires you to fill in all fields at this stage. The control of who has access to which feed's information is also incomplete.
-- Adding the starting content of the database tables will be changed to be handled somehow other than copy-pasting.
-- The code is very much a work in progress. The Pylint tool has not been used yet and there are no comments.
-- The graphic design of the application is not final. The pages just have a touch of css to make them a little more pleasing to the eye.
-
-## How to use the app
+## How to start using the app
 1. Get project from github
 
 1. Go to the application directory ```/horsefeedplanner/```
@@ -116,7 +69,8 @@ Administrators can remove user accounts and modify default feed information and 
     - where user = your username
     - key = a random 16-character string enclosed within ''-marks
 
-   
+1. Create a Python virtual environment venv in the directory:
+```python3 -m venv venv```
 
 1. Start venv:
 ```source venv/bin/activate```
@@ -127,11 +81,12 @@ Administrators can remove user accounts and modify default feed information and 
 1. Create database tables:
 ```psql < schema.sql```
 
+1. Insert the initial content into the database:
+```psql < data.sql```
+
 1. Start psql with command ```psql```
    
 1. Give command ```\dt```. The database should contain tables feeds, horses, nutritions and users.
-
-1. Copy-paste the contents of the file ```starter_content_for_the_database.txt``` into psql and press enter.
 
 1. If you give commands
    ```SELECT * FROM nutritions;```
@@ -139,10 +94,56 @@ Administrators can remove user accounts and modify default feed information and 
    ```SELECT name FROM feeds;```
 you should see data in these tables.
 
+1. For the first admin user, the role must be set manually from the command line to psql. 
+This user can then give admin rights to other users.
+   ```UPDATE users SET role = 'admin' WHERE id = <user's ID in database>;```
+
 1. Start the application with the command:
 ```flask run```
 
 1. Start a browser and go to http://127.0.0.1:5000/ (or where Flask tells the app is running).
 
-1. You can test creating an account and logging in, adding your own horses and feeds, and viewing their information.
+
+## Using the app
+### Register and login
+- The start page has links to create a new user account or log in.
+
+### Main page
+- List of user's horses containing links to their pages
+- Link to "Add a new horse" page
+- List of user's feeds
+- Link to "Add a new feed" page
+- List of defaut feeds
+- Admin users can choose whether the feeds they add are visible only to their own account, or whether they create default feeds that are visible to everyone.
+
+### Horse information page
+- Horse's basic information
+- Horse's weight and activity, and inputs to update them
+- A list of all the feeds the horse eats
+- Inputs to add, remove and update horse's diet
+- The Calcium/Phosphorus ratio of the horse's diet. This is one of the most important values to get right.
+- List and amounts of nutrients whose needs and limits are very individual, but whose amounts are still useful to know.
+- Complete summary of the nutrients the horse receives and the differences from the recommendations. 
+
+### Add a new horse page
+- A form for entering the information on a new horse and its diet
+
+### Feed information page
+- The nutritional content of the feed and link to modify it
+- The user can edit the information of the feeds they have added, but basic user can not edit the default feeds offered by the application.
+- Admin users can edit both their own and defaut feeds, but not other user's own feeds.
+
+### Administrator's page
+- List of all the users and buttons to update their user roles and remove their accouts
+- Button to change own role to 'basic'
+- Button to delete own user account
+
+
+## Resources
+Most of the nutrition info is from:
+- Luke: Hevosten ruokintasuositukset, url: https://maatalousinfo.luke.fi/fi/cms/rehu/hevoset/hevosten-ruokintasuositukset/, referred: 6.10.2023
+- Pirje Puumalainen: Hevosten vitamiiniruokinta, Savonia-ammattikorkeakoulu  9.5.2019, url: https://www.theseus.fi/handle/10024/168402, referred: 6.10.2023
+
+The logo is created with Stable Diffusion Online (https://stablediffusionweb.com/) and then modified and turned into .svg with Gimp and Incscape. Footer image is drawn on base of the logo with the same programs.
+
 
