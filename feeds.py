@@ -94,7 +94,7 @@ def get_name_and_owner(feed_id):
 
 
 def get_nutrition(reference):
-    sql = text("SELECT * FROM nutritions WHERE reference=:reference")
+    sql = text("SELECT reference, name, symbol, unit, description FROM nutritions WHERE reference=:reference")
     result = db.session.execute(sql, {"reference":reference})
     nutririon = result.fetchone()
     if not nutririon:
@@ -138,7 +138,11 @@ def get_nutrients_for_feed(feed_id):
 
 
 def get_nutrition_info(feed_id):
-    sql_feed = text("SELECT * FROM feeds WHERE id=:feed_id")
+    sql_feed = text("""SELECT moisture, energy, protein, fat, fiber, starch, 
+                    sugar, calcium, phosphorus, magnesium, sodium, iron, copper, 
+                    manganese, zinc, iodine, selenium, cobalt, vitamin_a, vitamin_d3, 
+                    vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6, vitamin_b12, biotin, 
+                    niacin FROM feeds WHERE id=:feed_id""")
 
     result_feed = db.session.execute(sql_feed, {"feed_id": feed_id})
     feed = result_feed.fetchone()
@@ -152,7 +156,7 @@ def get_nutrition_info(feed_id):
     data = []
 
     for index, ref in enumerate(references):
-        if ref != "id" and ref != "owner_id" and ref != "name":
+        if ref != "id":
             sql_nutrition = text("SELECT name, symbol, unit FROM nutritions WHERE reference=:reference")
             result_nutrition = db.session.execute(sql_nutrition, {"reference": ref})
             nutrition= result_nutrition.fetchone()

@@ -49,12 +49,12 @@ def delete(horse_id):
 
 
 def get_info(horse_id):
-    sql = text("SELECT * FROM horses WHERE id=:horse_id")
+    sql = text("SELECT id, horse_name, birth_year, weight_class, exercise_level, owner_id FROM horses WHERE id=:horse_id")
     result = db.session.execute(sql, {"horse_id":horse_id})
     horse = result.fetchone()
     if not horse:
         return None
-    #exercise_levels = ["Rest", "Light work", "Moderate work", "Heavy work"]
+
     horse_info = list(horse)
     print("horses get_info: horse_info = ", horse_info)
     return horse_info

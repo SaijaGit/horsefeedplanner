@@ -305,7 +305,28 @@ def get_recommendations(horse_id):
     weight_class = horse_info[3]
     exercise_level = horse_info[4]
 
-    sql = text("SELECT * FROM recommendations WHERE weight_class = :weight_class AND exercise_level = :exercise_level;")
+    sql = text("""SELECT energy, energy_tolerance, 
+               protein, protein_tolerance, 
+               calcium, calcium_tolerance, 
+               phosphorus, phosphorus_tolerance, 
+               magnesium, magnesium_tolerance, 
+               iron, iron_tolerance, 
+               copper, copper_tolerance, 
+               manganese, manganese_tolerance, 
+               zinc, zinc_tolerance, 
+               iodine, iodine_tolerance, 
+               selenium, selenium_tolerance, 
+               cobalt, cobalt_tolerance, 
+               vitamin_a, vitamin_a_tolerance, 
+               vitamin_d3, vitamin_d3_tolerance, 
+               vitamin_e, vitamin_e_tolerance, 
+               vitamin_b1, vitamin_b1_tolerance, 
+               vitamin_b2, vitamin_b2_tolerance, 
+               vitamin_b6, vitamin_b6_tolerance, 
+               vitamin_b12, vitamin_b12_tolerance, 
+               biotin, biotin_tolerance, 
+               niacin, niacin_tolerance 
+               FROM recommendations WHERE weight_class = :weight_class AND exercise_level = :exercise_level;""")
     
     print("diets get_recommendations: sql =", sql, {"weight_class":weight_class, "exercise_level":exercise_level} ) 
     try:
@@ -319,7 +340,7 @@ def get_recommendations(horse_id):
     if not recommendations:
         return None
     
-    return recommendations[3:]
+    return recommendations
 
 
 def format_value(value):
