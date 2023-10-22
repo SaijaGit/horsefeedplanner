@@ -1,3 +1,8 @@
+"""
+    This class handles the nutrition information of the feeds.
+    It retrieves and adds nutritional information to the database, and compiles the information into a suitable format for an html page.
+"""
+
 from db import db
 from sqlalchemy.sql import text
 import users

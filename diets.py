@@ -1,3 +1,7 @@
+"""
+    This class handles functionality related to the horse's diets.
+"""
+
 from db import db
 from flask import session
 from sqlalchemy.sql import text

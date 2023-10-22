@@ -1,3 +1,9 @@
+"""
+    Contains routes and processing for link and form requests 
+    that come from the application's html pages.
+"""
+
+
 from app import app
 from flask import render_template, request, session, redirect, flash, abort
 from datetime import datetime
