@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, request, session, redirect, flash
+from flask import render_template, request, session, redirect, flash, abort
 import users, horses, feeds, diets
 
 @app.route("/")
@@ -61,6 +61,9 @@ def newhorse():
         return render_template("newhorse.html")
     
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+
         horse_name = request.form["horse_name"]
         birth_year = request.form["birth_year"]
         weight_class = request.form["weight_class"]
@@ -109,6 +112,8 @@ def horse(horse_id):
 
 @app.route("/updatehorse/<horse_id>", methods=["POST"])
 def updatehorse(horse_id):
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
 
     weight_class = request.form["weight_class"]
     exercise_level = request.form["exercise_level"]
@@ -125,17 +130,22 @@ def updatehorse(horse_id):
 
 
 
-@app.route("/deletehorse/<horse_id>", methods=["GET", 'POST'] )
-def deletehorse(horse_id):
+@app.route("/deletehorse", methods=['POST'] )
+def deletehorse():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
 
+    horse_id = request.form["horse_id"]
     deleted = horses.delete(horse_id)
 
     if deleted:
-        print("routes deletehorse: horse deleted")
+        return redirect("/")
     else:
         flash("Failed to delete horse from the database", "error")
+        return render_template('horse.html', horse_id=horse_id)
     
-    return redirect("/")
+    
+
 
 
 
@@ -165,6 +175,8 @@ def newfeed():
         return render_template("newfeed.html")
     
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         name = request.form["name"]
         moisture = request.form["moisture"].replace(",", ".") or 0
         energy = request.form["energy"].replace(",", ".") or 0
@@ -227,6 +239,8 @@ def editfeed(feed_id):
     print("routes editfeed: feed_old_values =", feed_old_values )
     
     if request.method == "POST":
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
 
         nutrition = request.form.to_dict()
         nutrition_without_empty_fields = {}
@@ -253,17 +267,13 @@ def editfeed(feed_id):
 def add_feed_to_diet(horse_id):
     print("routes add_feed_to_diet: GOT HERE! horse_id = ", horse_id)
     if request.method == 'POST':
-
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         print("routes add_feed_to_diet: GOT HERE!!!!! POST")
-
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         feed_id = request.form["feed_id"]
         amount = request.form["amount"].replace(",", ".")
-
-        #try:
-        #    amount = float(amount)
-        #except ValueError:
-        #    flash("Amount must be a valid decimal number!", "error")
-        #    return redirect("/horse/" + horse_id)
 
         diets.add(horse_id, feed_id, amount)
         print("routes add_feed_to_diet: horse_id = ", horse_id, ", feed_id = ", feed_id, ", amount = ", amount )
@@ -275,28 +285,25 @@ def add_feed_to_diet(horse_id):
 def updatediet(horse_id):
     print("routes updatediet: GOT HERE! horse_id = ", horse_id)
     if request.method == 'POST':
-
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         print("routes updatediet: GOT HERE!!!!! POST")
 
         feed_id = request.form["feed_id"]
         amount = request.form["amount"].replace(",", ".")
-
-        #try:
-        #    amount = float(amount)
-        #except ValueError:
-        #    flash("Amount must be a valid decimal number!", "error")
-        #    return redirect("/horse/" + horse_id)
 
         diets.update(horse_id, feed_id, amount)
         print("routes updatediet: horse_id = ", horse_id, ", feed_id = ", feed_id, ", amount = ", amount )
 
     return redirect("/horse/" + horse_id)
 
+
 @app.route('/removefeed/<horse_id>', methods= ['POST'] )
 def removefeed(horse_id):
     print("routes removefeed: GOT HERE! horse_id = ", horse_id)
     if request.method == 'POST':
-
+        if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
         feed_id = request.form["feed_id"]
         print("routes removefeed: feed_id = ", feed_id)
 
@@ -305,14 +312,22 @@ def removefeed(horse_id):
 
     return redirect("/horse/" + horse_id)
 
-@app.route('/delefeed/<feed_id>', methods= ["GET", 'POST'] )
-def deletefeed(feed_id):
+@app.route('/deletefeed', methods= ['POST'] )
+def deletefeed():
+    
+    if session["csrf_token"] != request.form["csrf_token"]:
+            abort(403)
+    
+    feed_id = request.form["feed_id"]
     print("routes deletefeed: GOT HERE! feed_id = ", feed_id)
-    if request.method == 'GET':
-        feeds.delete(feed_id)
+    deleted = feeds.delete(feed_id)
+    if deleted:
         print("routes deletefeed: feed_id = ", feed_id)
+        return redirect("/")
+    else:
+        flash("Failed to delete feed from the database", "error")
+        return render_template('feed.html', feed_id=feed_id)
 
-    return redirect("/")
 
 @app.route("/admin")
 def admin():
@@ -328,8 +343,11 @@ def admin():
     
 @app.route("/update_user_role", methods= ['POST'] )
 def update_user_role():
-    user_role = users.user_role()
     
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
+    user_role = users.user_role()
     if user_role != 'admin':
         print("routes admin: not admin")
         flash("Update failed! You do not have rights to edit users.")
@@ -362,6 +380,10 @@ def de_admin_self():
 
 @app.route("/delete_user", methods= ['POST'] )
 def delete_user():
+
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     user_role = users.user_role()
     user_id= users.user_id()
     if user_role != 'admin':

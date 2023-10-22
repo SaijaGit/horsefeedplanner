@@ -37,12 +37,14 @@
                 <input type="radio" name="user_role" value="admin"> Admin
                 {% endif %}
                 <input type="hidden" name="user_id" value="{{ user[0] }}">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="submit" value="Save changes" class="button-link">
             </form>
       
             <form action="/delete_user" method="POST">
 
                 <input type="hidden" name="user_id" value="{{ user[0] }}">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="submit" value="Permanently delete the user account '{{ user[1] }}' and all data saved into it" class="button-link">
             </form>
             <br><br>

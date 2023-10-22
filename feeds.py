@@ -72,16 +72,20 @@ def update(feed_id, nutrition):
 
 def delete(feed_id):
     user_id= users.user_id()
+    user_role= users.user_role()
     owner_id=get_name_and_owner(feed_id)[1]
     print("feeds delete: user_id = ", user_id, ", owner_id = ", owner_id)
-    if user_id == owner_id:
+    if user_id == owner_id or (owner_id == 0 and user_role == 'admin'):
         sql = text("DELETE FROM feeds WHERE id=:feed_id")
-        db.session.execute(sql, {"feed_id":feed_id})
-        db.session.commit()
-
-    #if not feed:
-    #    return None
-    return True
+        try:
+            db.session.execute(sql, {"feed_id":feed_id})
+            db.session.commit()
+        except:
+            print("feeds delete: except") 
+            return False
+        return True
+    else :
+        return False
     
 
 def get_name_and_owner(feed_id):

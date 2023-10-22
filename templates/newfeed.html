@@ -142,7 +142,7 @@
         {% else %}
         <input type="hidden" name="feed-type" value="own">
         {% endif %}
-
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <p>
             <input type="submit" value="Save" class="button-link">
     </form>

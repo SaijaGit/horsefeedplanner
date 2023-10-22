@@ -25,14 +25,22 @@
     <p>
         <a href="{{ url_for('editfeed', feed_id=feed_id) }}" class="button-link">Edit feed</a>
         <br>
-        <a href="{{ url_for('deletefeed', feed_id=feed_id) }}" class="button-link">Delete feed from database</a>
+        <form action="/deletefeed" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            <input type="hidden" name="feed_id" value="{{ feed_id }}">
+            <input type="submit" value="Delete feed from database" class="button-link">
+        </form>
     </p>
     {% elif feed_owner == 0 and session.role == 'admin'%}
         <p class="note">Note! This is a default feed that is visible to all users!</p>
         <p>
         <a href="{{ url_for('editfeed', feed_id=feed_id) }}" class="button-link">Edit feed</a>
         <br>
-        <a href="{{ url_for('deletefeed', feed_id=feed_id) }}" class="button-link">Delete feed from database</a>
+        <form action="/deletefeed" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            <input type="hidden" name="feed_id" value="{{ feed_id }}">
+            <input type="submit" value="Delete feed from database" class="button-link">
+        </form>
     </p>
     {% else %}
     <p class="note">This is a defaut feed that can not be edited.</p>

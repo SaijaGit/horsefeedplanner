@@ -10,7 +10,11 @@
     <p>Name: {{ horse_info[1] }}</p>
     <p>Year of birth: {{ horse_info[2] }}</p>
     <br>
-    <a href="/deletehorse/{{ horse_info[0] }}" class="button-link" method="post">Delete horse from database</a>
+    <form action="/deletehorse" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        <input type="hidden" name="horse_id" value="{{ horse_info[0] }}">
+        <input type="submit" value="Delete horse from database" class="button-link">
+    </form>
 </div>
 
 <div class="section">
@@ -35,6 +39,7 @@
                 %}checked{% endif %}> Moderate work
             <input type="radio" name="exercise_level" value="Heavy work" {% if horse_info[4]=='Heavy work' %}checked{%
                 endif %}> Heavy work
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <p>
             <input type="submit" value="Save" class="button-link">
     </form>
@@ -54,11 +59,13 @@
             <form action="/updatediet/{{ horse_info[0] }}" method="POST" style="display: inline;">
                 <input type="hidden" name="feed_id" value="{{ feed[0] }}">
                 <input type="text" name="amount" placeholder="Amount (kg)" pattern="^\d*([\.,]?\d+)?$">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="submit" value="Save changes" class="button-link">
             </form>
 
             <form action="/removefeed/{{ horse_info[0] }}" method="POST" style="display: inline;">
                 <input type="hidden" name="feed_id" value="{{ feed[0] }}">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="submit" value="Remove from diet" class="button-link">
             </form>
         </li>
@@ -79,6 +86,7 @@
                 {% endfor %}
             </select>
             <input type="text" name="amount" placeholder="Amount (kg)">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <input type="submit" value="Save" class="button-link">
     </form>
 

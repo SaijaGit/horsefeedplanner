@@ -156,6 +156,8 @@
         <label for="niacin">Niacin</label>
         <input type="text" name="niacin" value="{{ feed_old_values[27] }}" pattern="^\d*([\.,]?\d+)?$"
             class="text-input"> mg/kg
+
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <br>
 
         {% if feed_owner == session.user_id %}

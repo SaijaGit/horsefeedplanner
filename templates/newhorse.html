@@ -31,7 +31,8 @@
         <input type="radio" name="exercise_level" value="Moderate work"> Moderate work
         <input type="radio" name="exercise_level" value="Heavy work"> Heavy work
         <br><br>
-
+        
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="submit" value="Save" class="button-link">
     </form>
 
