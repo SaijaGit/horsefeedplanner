@@ -11,21 +11,19 @@
     <h3>Edit feed</h3>
 
     <p>If the nutritional values of the feed are given in the form "unit / kg of dry matter", enter the moisture
-        percentage in the "moisture" field.
-        <br>Otherwise, set the "moisture" field to 0.
-    </p>
-
+        percentage in the "moisture" field. Otherwise, set the "moisture" field to 0.</p>
+    <p>Nutrient values may be integers, or decimal numbers. Negative values or values longer than 12 digits are not allowed.</p>
     <p>It is not necessary to fill in all fields, if you don't know all the values.</p>
 
     <h3>Contents</h3>
 
     <form action="{{ url_for('editfeed', feed_id=feed_id) }}" method="POST">
         <label for="name">Name of the feed: </label>
-        <input type="text" name="name" value="{{ feed_name }}" class="text-input" maxlength="30">
+        <input type="text" name="name" value="{{ feed_name }}" class="text-input" maxlength="30" placeholder="Max. 30 characters">
         <br>
 
         <label for="moisture">Moisture</label>
-        <input type="text" name="moisture" value="{{ feed_old_values[1] }}" pattern="^\d*([\.,]?\d+)?$" class="text-input" maxlength="12"> %
+        <input type="text" name="moisture" value="{{ feed_old_values[1] }}" pattern="^\d*([\.,]?\d+)?$" class="text-input" maxlength="12" placeholder="0-100"> %
         <br>
 
         <label for="energy">Metabolizable energy</label>
@@ -171,6 +169,16 @@
         <p class="note">This is a defaut feed that can not be edited.</p>
         {% endif %}
     </form>
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 
     <p>
         <a href="{{ url_for('feed', feed_id=feed_id) }}" class="button-link">Back to Feed Info</a>

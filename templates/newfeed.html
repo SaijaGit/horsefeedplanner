@@ -9,8 +9,8 @@
     <h2>Add a new feed!</h2>
 
     <p>If the nutritional values of the feed are given in the form "unit / kg of dry matter", enter the moisture
-        percentage in the "moisture" field.
-        <br>Otherwise, set the "moisture" field to 0.
+        percentage in the "moisture" field. Otherwise, set the "moisture" field to 0. 
+    <p>Nutrient values may be integers, or decimal numbers separated by "," or ".". Negative values or values longer than 12 digits are not allowed.
     </p>
 
 
@@ -21,7 +21,7 @@
 
     <form action="/newfeed" method="POST">
         <label for="name">Name of the feed: </label>
-        <input type="text" name="name" required class="text-input" maxlength="30">
+        <input type="text" name="name" required class="text-input" maxlength="30" placeholder="Max. 30 characters">
         <br>
 
         <label for="moisture">Moisture</label>

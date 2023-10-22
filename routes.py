@@ -1,5 +1,6 @@
 from app import app
 from flask import render_template, request, session, redirect, flash, abort
+from datetime import datetime
 import users, horses, feeds, diets
 
 @app.route("/")
@@ -58,7 +59,8 @@ def register():
 @app.route("/newhorse", methods=["GET", "POST"])
 def newhorse():
     if request.method == "GET":
-        return render_template("newhorse.html")
+        placeholder_year = f"Year between 1900-{datetime.now().year}"
+        return render_template("newhorse.html", placeholder_year=placeholder_year)
     
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
@@ -229,15 +231,15 @@ def newfeed():
 @app.route("/editfeed/<feed_id>", methods=["GET", "POST"])
 def editfeed(feed_id):
     user_id = users.user_id()
+    user_role = users.user_role()
     feed_name_owner = feeds.get_name_and_owner(feed_id)
 
-    if user_id != feed_name_owner[1] and feed_name_owner[1] != 0:
-        print("routes editfeed: not the owner, user_id =" + user_id + ",  feed_name_owner =" + feed_name_owner)
+    if user_id != feed_name_owner[1] and (feed_name_owner[1] != 0 and user_role != 'admin'):
+        print("routes editfeed: not the owner, user_id =", user_id, ",  feed_name_owner =" , feed_name_owner[1] , ", user_role = ", user_role)
         return redirect("/")
     
     feed_old_values = feeds.get_nutrients_for_feed(feed_id)
-    print("routes editfeed: feed_old_values =", feed_old_values )
-    
+
     if request.method == "POST":
         if session["csrf_token"] != request.form["csrf_token"]:
             abort(403)
@@ -245,8 +247,11 @@ def editfeed(feed_id):
         nutrition = request.form.to_dict()
         nutrition_without_empty_fields = {}
 
+        if float(nutrition['moisture']) > 100:
+            nutrition['moisture'] = "100"
+
         for nutrient in nutrition:
-            if nutrition[nutrient] != "": 
+            if nutrition[nutrient] != "" and nutrient != 'csrf_token': 
                 nutrition_without_empty_fields[nutrient] = nutrition[nutrient].replace(",", ".")
     
         print("routes editfeed: nutrition =" + str(nutrition_without_empty_fields) )
