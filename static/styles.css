@@ -226,6 +226,9 @@ button,
     color: #bba782;
 }
 
+.message_list {
+    list-style: none;
+}
 
 .table {
     margin: 0 auto;

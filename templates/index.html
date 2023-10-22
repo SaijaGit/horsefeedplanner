@@ -7,7 +7,7 @@
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-    <ul>
+    <ul class="message_list">
         {% for message in messages %}
         <li>{{ message }}</li>
         {% endfor %}
@@ -23,7 +23,7 @@
     <ul>
         {% for h in horse_list %}
         <li>
-            <a href="{{ url_for('horse', horse_id=h[0]) }}" class="text-link">{{ h[0] }}: {{ h[1] }}</a>
+            <a href="{{ url_for('horse', horse_id=h[0]) }}" class="text-link">{{ h[1] }}</a>
         </li>
         {% endfor %}
     </ul>
@@ -42,7 +42,7 @@
     <ul>
         {% for f in own_feed_list %}
         <li>
-            <a href="{{ url_for('feed', feed_id=f[0]) }}" class="text-link">{{ f[0] }}: {{ f[1] }}</a>
+            <a href="{{ url_for('feed', feed_id=f[0]) }}" class="text-link">{{ f[1] }}</a>
         </li>
         {% endfor %}
     </ul>
@@ -62,7 +62,7 @@
     <ul>
         {% for f in default_feed_list %}
         <li>
-            <a href="{{ url_for('feed', feed_id=f[0]) }}" class="text-link">{{ f[0] }}: {{ f[1] }}</a>
+            <a href="{{ url_for('feed', feed_id=f[0]) }}" class="text-link">{{ f[1] }}</a>
         </li>
         {% endfor %}
     </ul>

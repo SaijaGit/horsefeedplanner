@@ -1,7 +1,19 @@
+"""
+    This class handles functionality related to the users of the application.
+
+    It includes e.g. the following functions:
+        - creating a new user account
+        - login
+        - check out
+        - deleting the user account
+        - changing user roles
+        - acquisition of user data
+
+    It also manages Flask user sessions.
+"""
+
 from flask import session
-
 from db import db
-
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.sql import text
 import secrets
@@ -52,6 +64,9 @@ def user_role():
 
 
 def get_all_other_users():
+    if user_role() != 'admin':
+        return None
+    
     own_id = user_id()
     sql = text("SELECT id, username, role FROM users WHERE id !=:id ORDER BY id")
     result = db.session.execute(sql, {"id": own_id})

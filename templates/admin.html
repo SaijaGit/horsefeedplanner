@@ -24,7 +24,8 @@
     <ul>
         {% for user in user_list %}
         <li>
-            ID {{ user[0] }}: {{ user[1] }} (User role = {{ user[2] }})</a>
+            User ID {{ user[0] }}: {{ user[1] }}
+            <br>User role: {{ user[2] }}
             <p>
             <form action="/update_user_role" method="POST">
                 <label for="user_role">Change user rights:</label>
@@ -57,7 +58,7 @@
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
-    <ul>
+    <ul class="message_list">
         {% for message in messages %}
         <li>{{ message }}</li>
         {% endfor %}
@@ -72,23 +73,23 @@
 
     <h3>Own account</h3>
 
-    <p>User ID: {{ session.user_id }}</p>
-    <p>User name: {{ session.username }}</p>
+    <p>User ID: {{ session.user_id }}
+    <br>User name: {{ session.username }}</p>
 
     <p>Remove administrator rights from own account. Changes take effect after next login.
         <form action="/de_admin_self" method="POST" onsubmit="return confirm('Are you sure you want to remove administrators rights from your own account?');">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <input type="submit" value="Remove administrators rights from your own account" class="button-link">
         </form>
-    <br><a href="{{ url_for('de_admin_self') }}" class="button-link">Remove rights & logout</a>
     </p>
+    <br>
     <p>Permanently delete own account and logout.
         <form action="/delete_user" method="POST" onsubmit="return confirm('Are you sure you want to delete your own user account?');">
             <input type="hidden" name="user_id" value="{{ session.user_id }}">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <input type="submit" value="Permanently delete your own user account and all data saved into it" class="button-link">
         </form>
-    <p>
+    <p><br><br>
         <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
     </p>
 

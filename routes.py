@@ -387,6 +387,7 @@ def delete_user():
         if deleted:
             if int(user_id) != int(user_to_delete):
                 user_list = users.get_all_other_users()
+                flash("User deleted from the database.")
                 return render_template("admin.html", user_list=user_list)
             else:
                 return redirect("/logout")
