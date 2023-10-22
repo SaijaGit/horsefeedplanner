@@ -3,77 +3,75 @@ from flask import session
 from sqlalchemy.sql import text
 import feeds, horses
 
+
 def add(horse_id, feed_id, add_amount):
-    sql = text("SELECT amount FROM diets WHERE horse_id = :horse_id AND feed_id = :feed_id;")
-    print("diets add: sql =", sql, {"horse_id":horse_id, "feed_id":feed_id} ) 
+    sql = text(
+        "SELECT amount FROM diets WHERE horse_id = :horse_id AND feed_id = :feed_id;")
+
     try:
-        result = db.session.execute(sql, {"horse_id":horse_id, "feed_id":feed_id})
+        result = db.session.execute(
+            sql, {"horse_id": horse_id, "feed_id": feed_id})
     except:
-        print("diets add: except") 
         return False
-    
+
     amount = result.fetchall()
-    print("diets add: amount =", amount) 
+
     if not amount:
         return new(horse_id, feed_id, add_amount)
-    
-    else :
+    else:
         new_amount = amount[0][0] + float(add_amount)
         return update(horse_id, feed_id, new_amount)
 
 
 def new(horse_id, feed_id, amount):
-    sql = text("INSERT INTO diets (horse_id, feed_id, amount) VALUES (:horse_id, :feed_id, :amount)")
-    print("diets new: sql =", sql, {"horse_id":horse_id, "feed_id":feed_id, "amount":amount} )
+    sql = text(
+        "INSERT INTO diets (horse_id, feed_id, amount) VALUES (:horse_id, :feed_id, :amount)")
+
     try:
-        db.session.execute(sql, {"horse_id":horse_id, "feed_id":feed_id, "amount":amount })
+        db.session.execute(
+            sql, {"horse_id": horse_id, "feed_id": feed_id, "amount": amount})
         db.session.commit()
     except:
-        print("diets add: except") 
         return False
-    print("diets add: OK") 
     return True
 
 
 def update(horse_id, feed_id, amount):
-    sql = text("UPDATE diets SET amount = :amount WHERE horse_id = :horse_id AND feed_id = :feed_id;")
-    print("diets update: sql =", sql, {"amount":amount, "horse_id":horse_id, "feed_id":feed_id })
+    sql = text(
+        "UPDATE diets SET amount = :amount WHERE horse_id = :horse_id AND feed_id = :feed_id;")
 
     try:
-        db.session.execute(sql, {"amount":amount, "horse_id":horse_id, "feed_id":feed_id })
+        db.session.execute(
+            sql, {"amount": amount, "horse_id": horse_id, "feed_id": feed_id})
         db.session.commit()
 
     except:
-        print("diets update: except") 
         return False
-    print("diets update: OK") 
     return True
 
 
 def delete(horse_id, feed_id):
-    sql = text("DELETE FROM diets WHERE horse_id = :horse_id  AND feed_id = :feed_id;")
-    print("diets delete: sql =", sql, {"horse_id":horse_id, "feed_id":feed_id })
+    sql = text(
+        "DELETE FROM diets WHERE horse_id = :horse_id  AND feed_id = :feed_id;")
 
     try:
-        db.session.execute(sql, {"horse_id":horse_id, "feed_id":feed_id })
+        db.session.execute(sql, {"horse_id": horse_id, "feed_id": feed_id})
         db.session.commit()
 
     except:
-        print("diets delete: except") 
         return False
-    print("diets delete: OK") 
     return True
 
 
 def get_info(horse_id):
-    sql = text("SELECT d.feed_id, f.name AS feed_name, d.amount FROM diets d JOIN feeds f ON d.feed_id = f.id WHERE d.horse_id = :horse_id")
-    result = db.session.execute(sql, {"horse_id":horse_id})
-    diet= result.fetchall()
+    sql = text("""SELECT d.feed_id, f.name AS feed_name, d.amount
+               FROM diets d JOIN feeds f ON d.feed_id = f.id WHERE d.horse_id = :horse_id""")
+    result = db.session.execute(sql, {"horse_id": horse_id})
+    diet = result.fetchall()
     if not diet:
         return None
 
     diet_info = list(diet)
-    print("diets get_info: diet_info = ", diet_info)
     return diet_info
 
 
@@ -81,12 +79,10 @@ def get_nutrition_of_diet(horse_id):
     list_of_feeds = get_info(horse_id)
     nutrition_of_diet = []
 
-    if list_of_feeds: 
+    if list_of_feeds:
         for feed in list_of_feeds:
             nutrition_of_diet.append(feeds.get_nutrients_for_feed(feed[0]))
-    
-        print("diets get_nutrition_of_diet: ",  nutrition_of_diet)
-    
+
     return nutrition_of_diet
 
 
@@ -119,8 +115,8 @@ def get_nutrient_amounts(horse_id):
                 (d.amount - (d.amount * f.moisture / 100)) * f.biotin AS total_biotin,
                 (d.amount - (d.amount * f.moisture / 100)) * f.niacin AS total_niacin
                 FROM diets d JOIN feeds f ON d.feed_id = f.id WHERE d.horse_id = :horse_id;""")
-    result = db.session.execute(sql, {"horse_id":horse_id})
-    result_data= result.fetchall()
+    result = db.session.execute(sql, {"horse_id": horse_id})
+    result_data = result.fetchall()
     if not result_data:
         return None
 
@@ -135,7 +131,6 @@ def get_nutrient_amounts(horse_id):
                 row.append(format_value(raw_data[i][j]))
         nutrient_amounts.append(row)
 
-    print("diets get_nutrient_amounts: nutrient_amounts = ", nutrient_amounts)
     return nutrient_amounts
 
 
@@ -168,13 +163,12 @@ def get_nutrient_totals(horse_id):
                 SUM((d.amount - (d.amount * f.moisture / 100)) * f.biotin) AS total_biotin,
                 SUM((d.amount - (d.amount * f.moisture / 100)) * f.niacin) AS total_niacin
                 FROM diets d JOIN feeds f ON d.feed_id = f.id WHERE d.horse_id = :horse_id;""")
-    result = db.session.execute(sql, {"horse_id":horse_id})
-    result_data= result.fetchall()
+    result = db.session.execute(sql, {"horse_id": horse_id})
+    result_data = result.fetchall()
     if not result_data:
         return None
 
     raw_data = list(result_data[0])
-    print("diets get_nutrient_totals: raw_data = ", raw_data)
 
     if len(raw_data) == 0:
         return None
@@ -182,7 +176,7 @@ def get_nutrient_totals(horse_id):
     nutrient_totals = []
     for data in raw_data:
         nutrient_totals.append(format_value(data))
-    print("diets get_nutrient_totals: nutrient_totals = ", nutrient_totals)
+
     return nutrient_totals
 
 
@@ -191,21 +185,21 @@ def get_nutrition_table(horse_id):
     nutrition_table = []
 
     sql = text("SELECT symbol FROM nutritions")
-    result = db.session.execute(sql, {"horse_id":horse_id})
+    result = db.session.execute(sql, {"horse_id": horse_id})
     result_data = list(result.fetchall())
     if not result_data:
         return None
     symbols = [""]
     for symbol in result_data[1:]:
         symbols.append(symbol[0])
-    print("!!!! diets get_nutrition_table: symbols = ",  symbols)
+
 
     sql = text("SELECT unit FROM nutritions")
-    result = db.session.execute(sql, {"horse_id":horse_id})
-    result_data= list(result.fetchall())
+    result = db.session.execute(sql, {"horse_id": horse_id})
+    result_data = list(result.fetchall())
     if not result_data:
         return None
-    units= ["Feeds"]
+    units = ["Feeds"]
     for unit in result_data[1:]:
         if unit[0] == "MJ/kg DM":
             units.append("MJ")
@@ -213,51 +207,43 @@ def get_nutrition_table(horse_id):
             units.append("mg")
         elif unit[0] == "IU/kg":
             units.append("IU")
-        else :
+        else:
             units.append("g")
-    print("!!!! diets get_nutrition_table: units = ",  units)
 
     if not symbols or not units:
         return None
-    
+
     full_nutrition_table.append(symbols)
     full_nutrition_table.append(units)
 
     nutrition = get_nutrient_amounts(horse_id)
-    print("!!!!!!!!!!!! diets get_nutrition_table: nutrition = ",  nutrition)
+
     if not nutrition:
-        print("!!!!!!!!!!!! diets get_nutrition_table: NOT nutrition !!! ")
         return None
-    
+
     for feed in nutrition:
         full_nutrition_table.append(feed)
-    
+
     totals = get_nutrient_totals(horse_id)
-    print("!!!! diets get_nutrition_table: totals = ",  totals)
+
     if not totals:
         return None
     total = ["Total gain of nutrients"] + totals
 
     full_nutrition_table.append(total)
 
-    for row in full_nutrition_table :
+    for row in full_nutrition_table:
         nutrition_table.append(row[:3] + row[7:10] + row[11:])
 
     recommendations = get_recommendations(horse_id)
     if not recommendations:
-        print("!!!! diets get_nutrition_table: not recommendations")
         return None
-    
-    print("!!!! diets get_nutrition_table: recommendations = ",  recommendations)
 
     ranges = calculate_ranges(recommendations)
     differences = calculate_differencies(nutrition_table, recommendations)
 
-    print("!!!! diets get_nutrition_table: differences = ",  differences)
     nutrition_table.append(ranges)
     nutrition_table.append(differences)
-
-    print("diets get_nutrition_table: nutrition_table = ",  nutrition_table)
 
     return nutrition_table
 
@@ -276,80 +262,77 @@ def calculate_differencies(nutrition_table, recommendations):
             difference = format_value(value - (recommendation + tolerance))
         else:
             difference = 0
-        
+
         differences.append(float(difference))
 
-    print("!!!! diets calculate_differencies: differences = ",  differences)
     return differences
 
 
 def calculate_ranges(recommendations):
     ranges = ["Recommended"]
-    print("!!!! diets calculate_ranges: recommendations = ",  recommendations)
+
     for i in range(0, len(recommendations), 2):
         recommendation = float(recommendations[i])
         tolerance = float(recommendations[i + 1])
 
-        recommendation_range = "(" + format_value(recommendation - tolerance) + " - " + format_value(recommendation + tolerance) + ")"
-        
+        recommendation_range = "(" + format_value(recommendation - tolerance) + \
+            " - " + format_value(recommendation + tolerance) + ")"
         ranges.append(recommendation_range)
 
-    print("!!!! diets calculate_ranges: ranges = ",  ranges)
     return ranges
 
 
 def get_recommendations(horse_id):
-    horse_info= horses.get_info(horse_id)
+    horse_info = horses.get_info(horse_id)
     if not horse_info:
         return None
     weight_class = horse_info[3]
     exercise_level = horse_info[4]
 
-    sql = text("""SELECT energy, energy_tolerance, 
-               protein, protein_tolerance, 
-               calcium, calcium_tolerance, 
-               phosphorus, phosphorus_tolerance, 
-               magnesium, magnesium_tolerance, 
-               iron, iron_tolerance, 
-               copper, copper_tolerance, 
-               manganese, manganese_tolerance, 
-               zinc, zinc_tolerance, 
-               iodine, iodine_tolerance, 
-               selenium, selenium_tolerance, 
-               cobalt, cobalt_tolerance, 
-               vitamin_a, vitamin_a_tolerance, 
-               vitamin_d3, vitamin_d3_tolerance, 
-               vitamin_e, vitamin_e_tolerance, 
-               vitamin_b1, vitamin_b1_tolerance, 
-               vitamin_b2, vitamin_b2_tolerance, 
-               vitamin_b6, vitamin_b6_tolerance, 
-               vitamin_b12, vitamin_b12_tolerance, 
-               biotin, biotin_tolerance, 
-               niacin, niacin_tolerance 
-               FROM recommendations WHERE weight_class = :weight_class AND exercise_level = :exercise_level;""")
-    
-    print("diets get_recommendations: sql =", sql, {"weight_class":weight_class, "exercise_level":exercise_level} ) 
+    sql = text("""SELECT energy, energy_tolerance,
+               protein, protein_tolerance,
+               calcium, calcium_tolerance,
+               phosphorus, phosphorus_tolerance,
+               magnesium, magnesium_tolerance,
+               iron, iron_tolerance,
+               copper, copper_tolerance,
+               manganese, manganese_tolerance,
+               zinc, zinc_tolerance,
+               iodine, iodine_tolerance,
+               selenium, selenium_tolerance,
+               cobalt, cobalt_tolerance,
+               vitamin_a, vitamin_a_tolerance,
+               vitamin_d3, vitamin_d3_tolerance,
+               vitamin_e, vitamin_e_tolerance,
+               vitamin_b1, vitamin_b1_tolerance,
+               vitamin_b2, vitamin_b2_tolerance,
+               vitamin_b6, vitamin_b6_tolerance,
+               vitamin_b12, vitamin_b12_tolerance,
+               biotin, biotin_tolerance,
+               niacin, niacin_tolerance
+               FROM recommendations WHERE weight_class = :weight_class
+               AND exercise_level = :exercise_level;""")
+
     try:
-        result = db.session.execute(sql, {"weight_class":weight_class, "exercise_level":exercise_level})
+        result = db.session.execute(
+            sql, {"weight_class": weight_class, "exercise_level": exercise_level})
     except:
-        print("diets get_recommendations: except") 
         return None
-    
+
     recommendations = list(result.fetchall()[0])
-    print("diets get_recommendations: recommendations =", recommendations[3:]) 
     if not recommendations:
         return None
-    
+
     return recommendations
 
 
 def format_value(value):
-    print("diets format_value: original value = ",  value)
+
     number = float(value)
+    
     if number.is_integer():
         return str(int(number))
     elif abs(number) >= 100:
-        print("diets format_value: formated value = ",  "{:.0f}".format(number))
         return "{:.0f}".format(number)
     elif abs(number) > 1:
         return "{:.1f}".format(number)
@@ -359,42 +342,36 @@ def format_value(value):
         return "{:.3f}".format(number)
     elif 0.001 <= abs(number) < 0.01:
         return "{:.4f}".format(number)
-    elif abs(number) < 0.001:
+    else:
         return "{:.5f}".format(number)
 
 
-
-def get_Ca_P(horse_id):
+def get_ca_p(horse_id):
     sql = text("""SELECT
                 SUM((d.amount - (d.amount * f.moisture / 100)) * f.calcium) AS total_calcium,
                 SUM((d.amount - (d.amount * f.moisture / 100)) * f.phosphorus) AS total_phosphorus
                 FROM diets d JOIN feeds f ON d.feed_id = f.id WHERE d.horse_id = :horse_id;""")
-    result = db.session.execute(sql, {"horse_id":horse_id})
-    result_data= result.fetchall()
+    result = db.session.execute(sql, {"horse_id": horse_id})
+    result_data = result.fetchall()
     if not (result_data[0][0] and result_data[0][1]):
         return None
-    
-    print("diets calculate_Ca_P: calsium = ", result_data[0][0], ", phosphorus = ", result_data[0][1])
 
     calsium = float(result_data[0][0])
     phosphorus = float(result_data[0][1])
 
     if phosphorus == 0:
         relation = 0
-    else :
-        relation =  round(calsium / phosphorus, 1)
-    print("diets calculate_Ca_P: relation = ", relation)
+    else:
+        relation = round(calsium / phosphorus, 1)
+
     if relation < 1.2:
         difference = round(relation - 1.2, 1)
-        print("diets calculate_Ca_P: difference = ", difference)
     elif relation > 1.8:
         difference = round(relation - 1.8, 1)
     else:
         difference = 0
 
     ca_p = [relation, difference]
-
-    print("diets calculate_Ca_P: calsium = ", calsium, ", phosphorus = ", phosphorus, "Ca/P = ", ca_p[0], ", difference = ", ca_p[1])
     return ca_p
 
 
@@ -402,6 +379,5 @@ def get_horse_specific_nutrients(horse_id):
     totals = get_nutrient_totals(horse_id)
     if not totals:
         return None
-    print("diets get_horse_specific_nutrients: totals[2:6] = ", totals[2:6])
-    return totals[2:6]
 
+    return totals[2:6]
