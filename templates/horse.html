@@ -10,7 +10,7 @@
     <p>Name: {{ horse_info[1] }}</p>
     <p>Year of birth: {{ horse_info[2] }}</p>
     <br>
-    <form action="/deletehorse" method="POST">
+    <form action="/deletehorse" method="POST" onsubmit="return confirm('Are you sure you want to delete this horse?');">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
         <input type="hidden" name="horse_id" value="{{ horse_info[0] }}">
         <input type="submit" value="Delete horse from database" class="button-link">
@@ -58,7 +58,7 @@
                 <br>
             <form action="/updatediet/{{ horse_info[0] }}" method="POST" style="display: inline;">
                 <input type="hidden" name="feed_id" value="{{ feed[0] }}">
-                <input type="text" name="amount" placeholder="Amount (kg)" pattern="^\d*([\.,]?\d+)?$">
+                <input type="text" name="amount" placeholder="Amount (kg)" pattern="^\d*([\.,]?\d+)?$" maxlength="12">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                 <input type="submit" value="Save changes" class="button-link">
             </form>
@@ -85,7 +85,7 @@
                 <option value="{{ feed[0] }}">{{ feed[1] }}</option>
                 {% endfor %}
             </select>
-            <input type="text" name="amount" placeholder="Amount (kg)">
+            <input type="text" name="amount" placeholder="Amount (kg)" pattern="^\d*([\.,]?\d+)?$" maxlength="12">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
             <input type="submit" value="Save" class="button-link">
     </form>

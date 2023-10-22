@@ -41,7 +41,7 @@
                 <input type="submit" value="Save changes" class="button-link">
             </form>
       
-            <form action="/delete_user" method="POST">
+            <form action="/delete_user" method="POST" onsubmit="return confirm('Are you sure you want to delete this user?');">
 
                 <input type="hidden" name="user_id" value="{{ user[0] }}">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
@@ -76,11 +76,18 @@
     <p>User name: {{ session.username }}</p>
 
     <p>Remove administrator rights from own account. Changes take effect after next login.
+        <form action="/de_admin_self" method="POST" onsubmit="return confirm('Are you sure you want to remove administrators rights from your own account?');">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            <input type="submit" value="Remove administrators rights from your own account" class="button-link">
+        </form>
     <br><a href="{{ url_for('de_admin_self') }}" class="button-link">Remove rights & logout</a>
     </p>
     <p>Permanently delete own account.
-    <br><a href="{{ url_for('de_admin_self') }}" class="button-link">Delete account</a>
-    </p>
+        <form action="/delete_user" method="POST" onsubmit="return confirm('Are you sure you want to delete your own user account?');">
+            <input type="hidden" name="user_id" value="{{ session.user_id }}">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+            <input type="submit" value="Permanently delete your own user account and all data saved into it" class="button-link">
+        </form>
     <p>
         <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
     </p>

@@ -366,8 +366,11 @@ def update_user_role():
 
     return redirect("/admin/")
 
-@app.route("/de_admin_self", methods= ['GET'] )
+@app.route("/de_admin_self", methods= ['POST'] )
 def de_admin_self():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     user_id = users.user_id()
     updated = users.update_role(user_id, 'basic')
 
@@ -387,7 +390,7 @@ def delete_user():
     user_role = users.user_role()
     user_id= users.user_id()
     if user_role != 'admin':
-        print("routes delete: not admin")
+        print("routes delete user: not admin")
         flash("Update failed! You do not have rights to delete users.")
     
     else :
@@ -395,11 +398,14 @@ def delete_user():
         deleted = users.delete(user_to_delete)
 
         if deleted:
-            user_list = users.get_all_users()
-
-            if user_id != user_to_delete:
+            
+            print("routes delete user: user_id = ", user_id, " user_to_delete = ", user_to_delete)
+            if int(user_id) != int(user_to_delete):
+                print("routes delete user: HEP!")
+                user_list = users.get_all_users()
                 return render_template("admin.html", user_list=user_list)
             else:
+                
                 return redirect("/logout")
 
         
