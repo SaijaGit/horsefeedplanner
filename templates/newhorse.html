@@ -11,10 +11,10 @@
 
     <form action="/newhorse" method="POST">
         <label for="horse_name">Horse's name:</label>
-        <input type="text" name="horse_name" id="horse_name" class="text-input">
+        <input type="text" name="horse_name" id="horse_name" class="text-input" maxlength="30" required>
         <br>
         <label for="horse_name">Year of birth</label>
-        <input type="text" name="birth_year" id="birth_year" class="text-input">
+        <input type="text" name="birth_year" id="birth_year" class="text-input" required pattern="19[0-9][0-9]|20[0-9][0-9]|3000">
         <br><br>
 
         <label for="weight_class">Weight class:</label>

@@ -158,10 +158,6 @@ def feed(feed_id):
 
     return render_template("feed.html", feed_name=feed_name_owner[0], feed_owner=feed_name_owner[1], feed_id=feed_id, nutrition_info = nutrition_info)
 
-    #if nutrition_info:
-    #    return render_template("feed.html", feed_name=feed_name_owner[0], nutrition_info = nutrition_info)
-    #else:
-    #    return redirect("/")
 
 @app.route("/newfeed", methods=["GET", "POST"])
 def newfeed():
@@ -197,6 +193,10 @@ def newfeed():
         vitamin_b12 = request.form["vitamin_b12"].replace(",", ".") or 0
         biotin = request.form["biotin"].replace(",", ".") or 0
         niacin = request.form["niacin"].replace(",", ".") or 0
+        feed_type = request.form["feed-type"] or "own"
+
+        if users.user_role == 'basic':
+            feed_type = "own"
 
         print("routes newfeed: feed info =", name, moisture, energy, protein ) 
 
@@ -207,7 +207,7 @@ def newfeed():
         added = feeds.add(name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus,
                             magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt,
                             vitamin_a, vitamin_d3, vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6,
-                            vitamin_b12, biotin, niacin)
+                            vitamin_b12, biotin, niacin, feed_type)
         if not added:
             flash("Failed to add the feed :(", "error")
             return render_template("newfeed.html")
@@ -240,13 +240,13 @@ def editfeed(feed_id):
         updated = feeds.update(feed_id, nutrition_without_empty_fields)
 
         if not updated:
-            flash("Failed to update the feed :(", "error")
+            flash("Failed to update the feed! ", "error")
             return render_template("editfeed.html", feed_name=feed_name_owner[0], feed_old_values=feed_old_values, feed_id=feed_id)
         else:
             flash("Feed updated")
             return redirect("/feed/" + feed_id)
         
-    return render_template("editfeed.html", feed_name=feed_name_owner[0], feed_old_values=feed_old_values, feed_id=feed_id)
+    return render_template("editfeed.html", feed_name=feed_name_owner[0], feed_owner=feed_name_owner[1],feed_old_values=feed_old_values, feed_id=feed_id)
 
 
 @app.route('/add_feed_to_diet/<horse_id>', methods=['POST'])
@@ -313,3 +313,75 @@ def deletefeed(feed_id):
         print("routes deletefeed: feed_id = ", feed_id)
 
     return redirect("/")
+
+@app.route("/admin")
+def admin():
+    user_role = users.user_role()
+    
+    if user_role != 'admin':
+        print("routes admin: not admin")
+        return redirect("/")
+    
+    else :
+        user_list = users.get_all_users()
+        return render_template("admin.html", user_list=user_list)
+    
+@app.route("/update_user_role", methods= ['POST'] )
+def update_user_role():
+    user_role = users.user_role()
+    
+    if user_role != 'admin':
+        print("routes admin: not admin")
+        flash("Update failed! You do not have rights to edit users.")
+    
+    else :
+        user_to_update = request.form["user_id"]
+        new_role = request.form["user_role"]
+        updated = users.update_role(user_to_update, new_role)
+
+        if updated:
+            user_list = users.get_all_users()
+
+            return render_template("admin.html", user_list=user_list)
+        else:
+            flash("Failed to update user role", "error")
+
+    return redirect("/admin/")
+
+@app.route("/de_admin_self", methods= ['GET'] )
+def de_admin_self():
+    user_id = users.user_id()
+    updated = users.update_role(user_id, 'basic')
+
+    if updated:
+        return redirect("/logout")
+    else:
+        flash("Failed to update user role", "error")
+    
+    return redirect("/admin/")
+
+@app.route("/delete_user", methods= ['POST'] )
+def delete_user():
+    user_role = users.user_role()
+    user_id= users.user_id()
+    if user_role != 'admin':
+        print("routes delete: not admin")
+        flash("Update failed! You do not have rights to delete users.")
+    
+    else :
+        user_to_delete = request.form["user_id"]
+        deleted = users.delete(user_to_delete)
+
+        if deleted:
+            user_list = users.get_all_users()
+
+            if user_id != user_to_delete:
+                return render_template("admin.html", user_list=user_list)
+            else:
+                return redirect("/logout")
+
+        
+        else:
+            flash("Failed to delete user", "error")
+
+    return redirect("/admin/")

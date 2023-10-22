@@ -285,7 +285,7 @@ def calculate_differencies(nutrition_table, recommendations):
 
 def calculate_ranges(recommendations):
     ranges = ["Recommended"]
-
+    print("!!!! diets calculate_ranges: recommendations = ",  recommendations)
     for i in range(0, len(recommendations), 2):
         recommendation = float(recommendations[i])
         tolerance = float(recommendations[i + 1])

@@ -7,8 +7,16 @@ import users
 def add(name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus,
     magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt,
     vitamin_a, vitamin_d3, vitamin_e, vitamin_b1, vitamin_b2, vitamin_b6,
-    vitamin_b12, biotin, niacin):
-    user_id= users.user_id()
+    vitamin_b12, biotin, niacin, feed_type):
+
+    if feed_type == "default" :
+        owner_id = 0
+    else :
+        owner_id = users.user_id()
+    
+    if float(moisture) > 100:
+        moisture = "100"
+
     sql = text("""INSERT INTO feeds (
                 owner_id, name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, phosphorus,
                 magnesium, sodium, iron, copper, manganese, zinc, iodine, selenium, cobalt,
@@ -20,7 +28,7 @@ def add(name, moisture, energy, protein, fat, fiber, starch, sugar, calcium, pho
                 :vitamin_a, :vitamin_d3, :vitamin_e, :vitamin_b1, :vitamin_b2, :vitamin_b6,
                 :vitamin_b12, :biotin, :niacin)""")
     try:
-        db.session.execute(sql, {"owner_id":user_id, "name":name, "moisture":moisture, "energy":energy, 
+        db.session.execute(sql, {"owner_id":owner_id, "name":name, "moisture":moisture, "energy":energy, 
                                  "protein":protein, "fat": fat, "fiber": fiber, "starch": starch, "sugar": sugar,
                                  "calcium": calcium, "phosphorus": phosphorus, "magnesium": magnesium, "sodium": sodium,
                                  "iron": iron, "copper": copper, "manganese": manganese, "zinc": zinc, "iodine": iodine,

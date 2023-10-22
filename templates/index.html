@@ -2,7 +2,6 @@
 
 {% if session.user_id %}
 {% block content %}
-<p>You are logged in as {{ session.username }}</p>
 
 <div class="section">
     <h2>My Horses</h2>
@@ -44,6 +43,10 @@
 
 <div class="section">
     <h2>Default Feeds</h2>
+    {% if default_feed_list is none %}
+    <p>Unfortunately the administrators haven't yet added any default feed into Horse Feed Planner.</p>
+    <p>Stay tuned for the updates!</p>
+    {% else %}
     <ul>
         {% for f in default_feed_list %}
         <li>
@@ -51,6 +54,13 @@
         </li>
         {% endfor %}
     </ul>
+    {% endif %}
+
+    {% if session.role == 'admin' %}
+    <p>
+        <a href="{{ url_for('newfeed') }}" class="button-link">Add new feed!</a>
+    </p>
+{% endif %}
 </div>
 {% endblock %}
 {% else %}

@@ -15,7 +15,8 @@ CREATE TABLE horses (
     birth_year INT,
     weight_class INT,
     exercise_level horse_exercise,
-    owner_id INT
+    owner_id INT,
+    FOREIGN KEY (owner_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE feeds (

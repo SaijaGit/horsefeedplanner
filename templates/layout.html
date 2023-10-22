@@ -26,8 +26,12 @@
     <div class="header-nav">
         <nav>
             <a href="/">Home</a>
+            {% if session.role == 'admin' %}
+            <a href="/admin">Admin</a>
+            {% endif %}
             <a href="/logout">Log Out</a>
         </nav>
+        <p class="user-info">You are logged in as {{ session.username }}{% if session.role == 'admin' %} with Administrator Rights.{% endif %}</p>
     </div>
     {% endif %}
 

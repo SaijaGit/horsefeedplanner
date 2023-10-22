@@ -4,8 +4,6 @@
 {% if session.user_id %}
 {% block content %}
 
-<p>You are logged in as {{ session.username }}</p>
-
 <div class="section">
 
     <h2>Add a new feed!</h2>
@@ -23,7 +21,7 @@
 
     <form action="/newfeed" method="POST">
         <label for="name">Name of the feed: </label>
-        <input type="text" name="name" required class="text-input">
+        <input type="text" name="name" required class="text-input" maxlength="30">
         <br>
 
         <label for="moisture">Moisture</label>
@@ -133,6 +131,17 @@
         <label for="niacin">Niacin</label>
         <input type="text" name="niacin" pattern="^\d*([\.,]?\d+)?$" class="text-input"> mg/kg
         <br>
+
+        {% if session.role == 'admin' %}
+        <br>
+        <p>Select the visibility of the feed:
+        <br>
+        <input type="radio" name="feed-type" value="own" checked> Own (visible only for you)
+        <input type="radio" name="feed-type" value="default"> Default (visible for all users)
+        <br>
+        {% else %}
+        <input type="hidden" name="feed-type" value="own">
+        {% endif %}
 
         <p>
             <input type="submit" value="Save" class="button-link">

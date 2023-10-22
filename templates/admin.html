@@ -1,0 +1,90 @@
+{% extends "layout.html" %}
+
+{% if session.user_id %}
+
+{% block content %}
+
+{% if session.role != 'admin' %}
+<p class="note">Unfortunately you don't have authorization to view this page.</p>
+<p>
+    <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
+</p>
+
+{% else %}
+
+<div class="section">
+
+    <h2>Administration page</h2>
+
+    <h3>Edit users</h3>
+
+    {% if user_list is none %}
+    <p>You are the only user in the Horse Feed Planner database.</p>
+    {% else %}
+    <ul>
+        {% for user in user_list %}
+        <li>
+            ID {{ user[0] }}: {{ user[1] }} (User role = {{ user[2] }})</a>
+            <p>
+            <form action="/update_user_role" method="POST">
+                <label for="user_role">Change user rights:</label>
+                <br>
+                {% if user[2] == 'admin' %}
+                <input type="radio" name="user_role" value="basic" class="text-input"> Basic
+                <input type="radio" name="user_role" value="admin" checked> Admin
+                {% else %}
+                <input type="radio" name="user_role" value="basic" checked class="text-input"> Basic
+                <input type="radio" name="user_role" value="admin"> Admin
+                {% endif %}
+                <input type="hidden" name="user_id" value="{{ user[0] }}">
+                <input type="submit" value="Save changes" class="button-link">
+            </form>
+      
+            <form action="/delete_user" method="POST">
+
+                <input type="hidden" name="user_id" value="{{ user[0] }}">
+                <input type="submit" value="Permanently delete the user account '{{ user[1] }}' and all data saved into it" class="button-link">
+            </form>
+            <br><br>
+
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+</div>
+
+{% endif %}
+
+<div class="section">
+
+    <h3>Own account</h3>
+
+    <p>User ID: {{ session.user_id }}</p>
+    <p>User name: {{ session.username }}</p>
+
+    <p>Remove administrator rights from own account. Changes take effect after next login.
+    <br><a href="{{ url_for('de_admin_self') }}" class="button-link">Remove rights & logout</a>
+    </p>
+    <p>Permanently delete own account.
+    <br><a href="{{ url_for('de_admin_self') }}" class="button-link">Delete account</a>
+    </p>
+    <p>
+        <a href="{{ url_for('index') }}" class="button-link">Back to Home</a>
+    </p>
+
+</div>
+
+
+{% endblock %}
+{% endif %}

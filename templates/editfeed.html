@@ -3,11 +3,10 @@
 
 {% if session.user_id %}
 {% block content %}
-<p>You are logged in as {{ session.username }}</p>
 
 <div class="section">
 
-    <h2>{{ feed_name }}</h2>
+    <h2>{% if feed_owner == 0 and session.role == 'admin'%}Defaut feed: {% endif %}{{ feed_name }}</h2>
 
     <h3>Edit feed</h3>
 
@@ -159,8 +158,20 @@
             class="text-input"> mg/kg
         <br>
 
+        {% if feed_owner == session.user_id %}
         <p>
             <input type="submit" value="Save changes" class="button-link">
+        </p>
+        {% elif feed_owner == 0 and session.role == 'admin'%}
+            <br>
+            <p class="note">Note! This is a default feed that is visible to all users!</p>
+            <p>
+                <input type="submit" value="Save changes" class="button-link">
+            </p>
+        {% else %}
+        <br>
+        <p class="note">This is a defaut feed that can not be edited.</p>
+        {% endif %}
     </form>
 
     <p>

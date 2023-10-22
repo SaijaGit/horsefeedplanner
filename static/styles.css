@@ -99,11 +99,15 @@ nav a {
     color: #F4ECE7;
     margin-right: 20px;
 }
-
+.user-info {
+    font-size: 1.2em;
+    padding-top: 5px;
+    margin-left: 3.5%;
+}
 
 
 main {
-    padding: 20px;
+    padding: 10px;
     flex: 1;
 }
 
@@ -129,10 +133,12 @@ main li {
 }
 
 .section p {
-    /*font-family: Helvetica, Arial, sans-serif;*/
     margin-bottom: 1em;
 }
 
+.note {
+    font-weight: bold; 
+}
 
 .welcome {
     width: 60%;
@@ -181,6 +187,7 @@ button,
     border-radius: 5px;
     text-decoration: none;
     margin: 5px;
+    white-space: normal;
 }
 
 button,
